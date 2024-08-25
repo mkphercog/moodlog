@@ -1,13 +1,16 @@
-import { Dashboard, Login, Main } from "@/components";
+import { Dashboard, Main } from "@/components";
 import { Metadata } from "next";
+import { FC, PropsWithChildren } from "react";
 
 export const metadata: Metadata = {
   title: "Mood.log · Dashboard",
 };
 
-const DashboardPage = () => {
-  const isAuthenticated = true;
-
-  return <Main>{isAuthenticated ? <Dashboard /> : <Login />}</Main>;
+const DashboardPage: FC<PropsWithChildren> = () => {
+  return (
+    <Main>
+      <Dashboard />
+    </Main>
+  );
 };
 export default DashboardPage;
