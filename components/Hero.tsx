@@ -1,4 +1,4 @@
-import { FUGAZ_FONT } from "@/constants";
+import { SECONDARY_FONT } from "@/constants";
 import { Calendar } from "./Calendar";
 import { CallToAction } from "./CallToAction";
 
@@ -6,7 +6,7 @@ export const Hero = () => {
   return (
     <div className="py-4 md:py-10 flex flex-col gap-8 sm:gap-10">
       <h1
-        className={`text-5xl sm:text-6xl md:text-7xl text-center ${FUGAZ_FONT.className}`}
+        className={`text-5xl sm:text-6xl md:text-7xl !leading-[initial] text-center ${SECONDARY_FONT.className}`}
       >
         <span className="textGradient">Mood.log()</span> helps you track your{" "}
         <span className="textGradient">daily</span> mood!

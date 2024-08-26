@@ -1,16 +1,5 @@
 "use client";
 
-import { auth, db } from "@/firebase";
-import {
-  User,
-  UserCredential,
-  UserMetadata,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
-import { DocumentData, doc, getDoc } from "firebase/firestore";
 import {
   useContext,
   useState,
@@ -21,37 +10,74 @@ import {
   SetStateAction,
   Dispatch,
 } from "react";
+import { DocumentData, doc, getDoc } from "firebase/firestore";
+import {
+  User,
+  UserMetadata,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import { auth, db } from "@/firebase";
+import { ErrorMessagesType } from "@/types";
+import { useRouter } from "next/navigation";
 
 type AuthContextType = {
   loading: boolean;
   currentUser: User | null;
-  userDataObj: DocumentData | null;
-  setUserDataObj: Dispatch<SetStateAction<UserMetadata | null>>;
-  signUp: (email: string, password: string) => Promise<UserCredential>;
-  logIn: (email: string, password: string) => Promise<UserCredential>;
+  authError: ErrorMessagesType;
+  setAuthError: Dispatch<SetStateAction<ErrorMessagesType>>;
+  userData: DocumentData | null;
+  setUserData: Dispatch<SetStateAction<UserMetadata | null>>;
+  signUp: (email: string, password: string) => Promise<void>;
+  logIn: (email: string, password: string) => Promise<void>;
   logOut: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
+  const router = useRouter();
   const [currentUser, setCurrentUser] =
     useState<AuthContextType["currentUser"]>(null);
-  const [userDataObj, setUserDataObj] =
-    useState<AuthContextType["userDataObj"]>(null);
+  const [userData, setUserData] = useState<AuthContextType["userData"]>(null);
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState<ErrorMessagesType>("none");
 
-  const signUp = (email: string, password: string) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+  const signUp: AuthContextType["signUp"] = async (
+    email: string,
+    password: string
+  ) => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      router.replace("/dashboard");
+    } catch (error) {
+      if (error instanceof Error) {
+        const emailExists = error.message.includes("already-in-use");
+        setAuthError(emailExists ? "exists" : "incorrect");
+      } else {
+        console.error("Unexpected error: ", error);
+      }
+    }
   };
 
-  const logIn = (email: string, password: string) => {
-    return signInWithEmailAndPassword(auth, email, password);
+  const logIn: AuthContextType["logIn"] = async (
+    email: string,
+    password: string
+  ) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      router.replace("/dashboard");
+    } catch (error) {
+      setAuthError("incorrect");
+    }
   };
 
-  const logOut = () => {
+  const logOut: AuthContextType["logOut"] = () => {
     setCurrentUser(null);
-    setUserDataObj(null);
+    setUserData(null);
+    router.replace("/");
 
     return signOut(auth);
   };
@@ -64,18 +90,16 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
           console.info("No user found!");
           return;
         }
-        setCurrentUser(user);
 
+        setCurrentUser(user);
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
-        let firebaseData = {};
 
         if (docSnap.exists()) {
-          firebaseData = docSnap.data();
+          setUserData(docSnap.data());
         }
-        setUserDataObj(firebaseData);
       } catch (error) {
-        console.log(error);
+        console.error("User data not found, ", error);
       } finally {
         setLoading(false);
       }
@@ -87,8 +111,10 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const value = {
     loading,
     currentUser,
-    userDataObj,
-    setUserDataObj,
+    authError,
+    setAuthError,
+    userData,
+    setUserData,
     signUp,
     logIn,
     logOut,

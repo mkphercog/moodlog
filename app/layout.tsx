@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import { FUGAZ_FONT, OPENSANS_FONT } from "@/constants";
 import Link from "next/link";
+import { SECONDARY_FONT, PRIMARY_FONT } from "@/constants";
 import { AuthProvider } from "@/context/AuthContext";
-import { Head } from "./head";
 import { Logout } from "@/components";
+import { Head } from "./head";
+
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Mood.log",
+  title: "Mood.log()",
   description: "Track your daily mood!",
 };
 
@@ -21,12 +22,12 @@ export default function RootLayout({
       <Head />
       <AuthProvider>
         <body
-          className={`w-full max-w-[1000px] mx-auto text-sm sm:text-base min-h-screen flex flex-col text-slate-800 ${OPENSANS_FONT.className}`}
+          className={`w-full max-w-[1000px] mx-auto text-sm sm:text-base min-h-screen flex flex-col text-slate-800 ${PRIMARY_FONT.className}`}
         >
           <header className="p-4 sm:p-8 flex items-center justify-between gap-4">
             <Link href={"/"}>
               <h1
-                className={`text-base sm:text-lg textGradient ${FUGAZ_FONT.className}`}
+                className={`text-xl sm:text-2xl textGradient ${SECONDARY_FONT.className}`}
               >
                 Mood.log()
               </h1>
@@ -35,8 +36,16 @@ export default function RootLayout({
           </header>
           {children}
           <footer className="p-4 sm:p-8 grid place-items-center">
-            <p className={`text-indigo-500 ${FUGAZ_FONT.className}`}>
-              Created with ❤️‍🔥
+            <p className={`text-green-500 ${SECONDARY_FONT.className}`}>
+              Created by{" "}
+              <Link
+                className=" duration-300 hover:text-green-400"
+                href={"https://marcin-hercog.netlify.app/"}
+                target="_blank"
+              >
+                Marcin Hercog
+              </Link>{" "}
+              ❤️‍🔥
             </p>
           </footer>
         </body>

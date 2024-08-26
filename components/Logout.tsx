@@ -1,6 +1,7 @@
 "use client";
+
 import { useAuth } from "@/context/AuthContext";
-import { Button } from "./Button";
+import { Button } from "./ui";
 
 export const Logout = () => {
   const { currentUser, logOut } = useAuth();
@@ -8,8 +9,11 @@ export const Logout = () => {
   if (!currentUser) return;
 
   return (
-    <Button variant="outline" onClick={logOut}>
-      Logout
-    </Button>
+    <div className="flex gap-1 items-center">
+      <p className={`text-xs sm:text-sm font-bold`}>{currentUser.email}</p>
+      <Button variant="outline" onClick={logOut}>
+        Logout
+      </Button>
+    </div>
   );
 };
