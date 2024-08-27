@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "./ui/Button";
+import { Button } from "./ui";
 import { useAuth } from "@/context/AuthContext";
 import { SECONDARY_FONT } from "@/constants";
-import { Loading } from "./Loading";
+import { Loading } from "./ui";
 
 export const CallToAction = () => {
   const { currentUser, loading } = useAuth();

@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ERROR_MESSAGES, SECONDARY_FONT } from "@/constants";
 import { useAuth } from "@/context/AuthContext";
-import { Button } from "./ui/Button";
+import { Button } from "./ui";
 
 export const Login = () => {
   const searchParams = useSearchParams();

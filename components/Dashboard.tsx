@@ -1,8 +1,8 @@
 "use client";
 
 import { DocumentData, doc, setDoc } from "firebase/firestore";
-import { Calendar, Loading, Login, DashboardStats } from "./";
-import { Button } from "./ui/Button";
+import { Login, DashboardStats } from "./";
+import { Button, Calendar, Loading } from "./ui";
 import { SECONDARY_FONT, MOODS } from "@/constants";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/firebase";

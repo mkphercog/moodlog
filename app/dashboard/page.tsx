@@ -1,4 +1,4 @@
-import { Main } from "@/components/Main";
+import { Main } from "@/components/ui";
 import { Dashboard } from "@/components/Dashboard";
 import { Metadata } from "next";
 

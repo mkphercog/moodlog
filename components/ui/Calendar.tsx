@@ -10,7 +10,7 @@ import {
   LANDING_PAGE_MOODS,
 } from "@/constants";
 import { useScreenSize } from "@/hooks/useScreenSize";
-import { Button } from "./ui/Button";
+import { Button } from "./Button";
 import { DocumentData } from "firebase/firestore";
 
 type CalendarProps = {
