@@ -1,5 +1,5 @@
-import { Main } from "@/components";
-import { Button } from "@/components/ui";
+import { Main } from "@/components/Main";
+import { Button } from "@/components/ui/Button";
 import { SECONDARY_FONT } from "@/constants";
 import Link from "next/link";
 

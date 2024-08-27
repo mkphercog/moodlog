@@ -1,6 +1,5 @@
 import { SECONDARY_FONT } from "@/constants";
-import { Calendar } from "./Calendar";
-import { CallToAction } from "./CallToAction";
+import { Calendar, CallToAction } from "./";
 
 export const Hero = () => {
   return (

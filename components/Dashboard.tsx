@@ -2,7 +2,7 @@
 
 import { DocumentData, doc, setDoc } from "firebase/firestore";
 import { Calendar, Loading, Login, DashboardStats } from "./";
-import { Button } from "./ui";
+import { Button } from "./ui/Button";
 import { SECONDARY_FONT, MOODS } from "@/constants";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/firebase";
@@ -49,7 +49,7 @@ export const Dashboard = () => {
     return <Loading />;
   }
 
-  if (!currentUser) {
+  if (!currentUser || !currentUser.emailVerified) {
     return <Login />;
   }
 

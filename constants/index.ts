@@ -45,6 +45,8 @@ export const MONTHS_LIST = Object.keys(MONTHS);
 export const ERROR_MESSAGES: Record<ErrorMessagesType, string | null> = {
   exists: "This email exists in database. Log in to the app.",
   incorrect: "Inccorect data. Try again.",
+  verification:
+    "Verify your email address by clicking on the link sent to the email address you provided during registration.",
   password: "Password must be 6 characters long.",
   email: "Email is incorrect: example@example.com.",
   empty: "Complete all fields!",

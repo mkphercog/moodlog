@@ -7,14 +7,11 @@ import {
   createContext,
   PropsWithChildren,
   FC,
-  SetStateAction,
-  Dispatch,
 } from "react";
-import { DocumentData, doc, getDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import {
-  User,
-  UserMetadata,
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
@@ -22,22 +19,14 @@ import {
 import { auth, db } from "@/firebase";
 import { ErrorMessagesType } from "@/types";
 import { useRouter } from "next/navigation";
-
-type AuthContextType = {
-  loading: boolean;
-  currentUser: User | null;
-  authError: ErrorMessagesType;
-  setAuthError: Dispatch<SetStateAction<ErrorMessagesType>>;
-  userData: DocumentData | null;
-  setUserData: Dispatch<SetStateAction<UserMetadata | null>>;
-  signUp: (email: string, password: string) => Promise<void>;
-  logIn: (email: string, password: string) => Promise<void>;
-  logOut: () => Promise<void>;
-};
+import { getRedirectUrl } from "@/utils";
+import { AuthContextType } from "./AuthContext.type";
+import { useToast } from "@/components/ui/use-toast";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
+  const { toast } = useToast();
   const router = useRouter();
   const [currentUser, setCurrentUser] =
     useState<AuthContextType["currentUser"]>(null);
@@ -50,8 +39,26 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     password: string
   ) => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      router.replace("/dashboard");
+      const registerResponse = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      sendEmailVerification(registerResponse.user, {
+        url: `${getRedirectUrl()}/dashboard?mode=login&email=${
+          registerResponse.user.email
+        }`,
+      })
+        .then(async () => {
+          toast({
+            title: "Check your mail! 📧",
+            description:
+              "We have sent you a verification email, click the link and log in to the app.",
+          });
+          await logOut();
+        })
+        .catch((reason) => console.error(reason));
     } catch (error) {
       if (error instanceof Error) {
         const emailExists = error.message.includes("already-in-use");
@@ -67,17 +74,32 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     password: string
   ) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const response = await signInWithEmailAndPassword(auth, email, password);
+
+      if (!response.user.emailVerified) {
+        toast({
+          title: "Check your mail! 📧",
+          description:
+            "Before log in to the app you need to verify your email.",
+        });
+        logOut(false);
+        setAuthError("verification");
+        return;
+      }
+
       router.replace("/dashboard");
     } catch (error) {
       setAuthError("incorrect");
     }
   };
 
-  const logOut: AuthContextType["logOut"] = () => {
+  const logOut: AuthContextType["logOut"] = (shouldRedirect = true) => {
     setCurrentUser(null);
     setUserData(null);
-    router.replace("/");
+
+    if (shouldRedirect) {
+      router.replace("/");
+    }
 
     return signOut(auth);
   };
@@ -86,7 +108,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       try {
         setLoading(true);
-        if (!user) {
+        if (!user || !user.emailVerified) {
           console.info("No user found!");
           return;
         }

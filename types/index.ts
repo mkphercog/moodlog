@@ -4,6 +4,7 @@ export type ErrorMessagesType =
   | "password"
   | "email"
   | "empty"
+  | "verification"
   | "none";
 
 export type StatusesType = {

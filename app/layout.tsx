@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SECONDARY_FONT, PRIMARY_FONT } from "@/constants";
 import { AuthProvider } from "@/context/AuthContext";
-import { Logout } from "@/components";
+import { Toaster } from "@/components/ui/toaster";
+import { Logout } from "@/components/Logout";
 import { Head } from "./head";
 
 import "./globals.css";
@@ -48,6 +49,7 @@ export default function RootLayout({
               ❤️‍🔥
             </p>
           </footer>
+          <Toaster />
         </body>
       </AuthProvider>
     </html>

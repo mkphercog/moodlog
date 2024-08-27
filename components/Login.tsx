@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ERROR_MESSAGES, SECONDARY_FONT } from "@/constants";
 import { useAuth } from "@/context/AuthContext";
-import { Button } from "./ui";
+import { Button } from "./ui/Button";
 
 export const Login = () => {
   const searchParams = useSearchParams();
@@ -107,7 +107,7 @@ export const Login = () => {
           </Button>
         </div>
         {authError !== "none" && (
-          <p className="text-xs sm:text-sm text-red-600 font-bold">
+          <p className="text-xs sm:text-sm text-center max-w-[400px] text-red-600 font-bold">
             {ERROR_MESSAGES[authError]}
           </p>
         )}

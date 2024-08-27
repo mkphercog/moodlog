@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "./ui";
+import { Button } from "./ui/Button";
 import { useAuth } from "@/context/AuthContext";
 import { SECONDARY_FONT } from "@/constants";
 import { Loading } from "./Loading";
