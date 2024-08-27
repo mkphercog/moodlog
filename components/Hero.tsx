@@ -16,7 +16,7 @@ export const Hero = () => {
         <span className="font-semibold">every day of every year.</span>
       </p>
       <CallToAction />
-      <Calendar completeData={{}} demo={true} />
+      <Calendar />
     </div>
   );
 };

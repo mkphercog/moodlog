@@ -86,7 +86,7 @@ export const Dashboard = () => {
           );
         })}
       </div>
-      <Calendar completeData={userData} />
+      <Calendar />
     </div>
   );
 };
