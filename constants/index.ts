@@ -53,6 +53,8 @@ export const ERROR_MESSAGES: Record<ErrorMessagesType, string | null> = {
   none: null,
 };
 
+export const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
 export const GRADIENTS = {
   indigo: [
     "#dcd6ff",

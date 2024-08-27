@@ -46,7 +46,7 @@ export const Dashboard = () => {
   };
 
   if (loading) {
-    return <Loading />;
+    return <Loading size="lg" />;
   }
 
   if (!currentUser || !currentUser.emailVerified) {
