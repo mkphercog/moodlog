@@ -15,6 +15,7 @@ export const InputPassword: FC<InputProps> = (props) => {
         name="Password"
         type={isPasswordVisible ? "text" : "password"}
         placeholder="Password"
+        className="pr-[42px]"
         {...props}
       />
 

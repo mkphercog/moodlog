@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "../Button";
 import { SECONDARY_FONT } from "@/constants";
 import { useCalendar } from "./CalendarContext";

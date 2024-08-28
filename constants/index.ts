@@ -49,13 +49,14 @@ export const ERROR_MESSAGES: Record<ErrorMessagesType, string | null> = {
     "Verify your email address by clicking on the link sent to the email address you provided during registration.",
   password: "Password must be 6 characters long.",
   email: "Email is incorrect: example@example.com.",
-  empty: "Complete all fields!",
+  empty: "Complete all fields.",
   none: null,
 };
 
 export const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+export const USER_NAME_MAX_LENGTH = 10;
 
-export const GRADIENTS = {
+export const GRADIENTS: Record<string, string[]> = {
   indigo: [
     "#dcd6ff",
     "#b8adff",

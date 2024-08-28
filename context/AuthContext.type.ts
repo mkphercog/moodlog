@@ -13,4 +13,5 @@ export type AuthContextType = {
   signUp: (email: string, password: string) => Promise<void>;
   logIn: (email: string, password: string) => Promise<void>;
   logOut: (shouldRedirect?: boolean) => Promise<void>;
+  updateUserName: (userName: string) => Promise<void>;
 };

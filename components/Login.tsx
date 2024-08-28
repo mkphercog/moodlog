@@ -50,7 +50,7 @@ export const Login = () => {
       >
         {isRegisterMode ? "Register" : "Log In"}
       </h3>
-      <p>You're one step away!</p>
+      <p>{`You're one step away!`}</p>
 
       <form
         className="w-full max-w-[400px] flex flex-col justify-center items-center gap-4"

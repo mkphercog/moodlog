@@ -15,6 +15,7 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile,
 } from "firebase/auth";
 import { auth, db } from "@/firebase";
 import { ErrorMessagesType } from "@/types";
@@ -104,6 +105,35 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     return signOut(auth);
   };
 
+  const updateUserName = async (userName: string) => {
+    if (!auth.currentUser) return;
+
+    await updateProfile(auth.currentUser, {
+      displayName: userName,
+    });
+    await auth.currentUser
+      .reload()
+      .then(() => {
+        setCurrentUser(auth.currentUser);
+
+        const toastMessage = userName
+          ? `User name "${auth.currentUser?.displayName}" set correctly.`
+          : "User name deleted correctly.";
+
+        toast({
+          title: "Success!",
+          description: toastMessage,
+        });
+      })
+      .catch(() => {
+        toast({
+          title: "Bad news",
+          description:
+            "Something went wrong while setting the name. Please try again.",
+        });
+      });
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       try {
@@ -137,6 +167,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     setAuthError,
     userData,
     setUserData,
+    updateUserName,
     signUp,
     logIn,
     logOut,
