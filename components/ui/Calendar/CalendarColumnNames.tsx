@@ -1,8 +1,10 @@
 import { DAY_LIST, SECONDARY_FONT } from "@/constants";
+import { useUiColors } from "@/context/ColorsContext";
 import { useScreenSize } from "@/hooks/useScreenSize";
 
 export const CalendarColumnNames = () => {
   const { isMediumScreen } = useScreenSize();
+  const { currentColors } = useUiColors();
 
   return (
     <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-1">
@@ -10,7 +12,8 @@ export const CalendarColumnNames = () => {
         return (
           <p
             key={index}
-            className={`md:text-xl text-center truncate text-green-600 ${SECONDARY_FONT.className}`}
+            style={{ color: currentColors[6] }}
+            className={`md:text-xl text-center truncate ${SECONDARY_FONT.className}`}
             title={dayOfWeek}
           >
             {isMediumScreen

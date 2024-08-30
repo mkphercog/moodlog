@@ -148,7 +148,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setUserData(docSnap.data());
+          const { nextDateChangeUserName, uiColor, ...restData } =
+            docSnap.data();
+          setUserData(restData);
         }
       } catch (error) {
         console.error("User data not found, ", error);

@@ -1,6 +1,7 @@
 import { FC } from "react";
-import { GRADIENTS, LANDING_PAGE_MOODS, MONTHS_LIST, MOODS } from "@/constants";
+import { LANDING_PAGE_MOODS, MONTHS_LIST, MOODS } from "@/constants";
 import { useCalendar } from "./CalendarContext";
+import { useUiColors } from "@/context/ColorsContext";
 
 type CalendarRowItemProps = {
   dayNumber: number;
@@ -9,6 +10,7 @@ type CalendarRowItemProps = {
 export const CalendarRowItem: FC<CalendarRowItemProps> = ({ dayNumber }) => {
   const { isLandingPage, userData, now, selectedMonth, selectedYear } =
     useCalendar();
+  const { currentColors } = useUiColors();
 
   const isToday =
     dayNumber === now.day &&
@@ -16,12 +18,12 @@ export const CalendarRowItem: FC<CalendarRowItemProps> = ({ dayNumber }) => {
     selectedYear === now.year;
 
   const bgColor = isLandingPage
-    ? GRADIENTS.green[LANDING_PAGE_MOODS[dayNumber] + 2]
+    ? currentColors[LANDING_PAGE_MOODS[dayNumber] + 2]
     : dayNumber in userData
-    ? GRADIENTS.green[userData[dayNumber] + 2]
+    ? currentColors[userData[dayNumber] + 2]
     : "white";
-  const textColor = bgColor === "white" ? "text-green-500" : "text-white";
-  const borderColor = isToday ? "border-green-950" : "border-transparent";
+  const textColor = bgColor === "white" ? currentColors[5] : "white";
+  const borderColor = isToday ? currentColors[10] : "transparent";
 
   const demoMoodSymbol =
     dayNumber in LANDING_PAGE_MOODS
@@ -33,13 +35,16 @@ export const CalendarRowItem: FC<CalendarRowItemProps> = ({ dayNumber }) => {
 
   return (
     <div
-      style={{ background: bgColor }}
+      style={{
+        background: bgColor,
+        color: textColor,
+        borderColor: borderColor,
+      }}
       className={`
        flex items-center gap-1 sm:gap-2 justify-between 
        px-1 py-2 sm:p-2
        rounded-lg border-2 calendarShadow
        text-xs sm:text-sm font-bold
-       ${borderColor} ${textColor}
      `}
     >
       <p>{dayNumber}</p>

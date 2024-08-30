@@ -1,3 +1,4 @@
+import { useUiColors } from "@/context/ColorsContext";
 import {
   ForwardRefRenderFunction,
   InputHTMLAttributes,
@@ -13,6 +14,7 @@ const InputWithRef: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
   props,
   ref
 ) => {
+  const { currentColors } = useUiColors();
   const { label, name, isError, className, ...restProps } = props;
 
   return (
@@ -21,6 +23,10 @@ const InputWithRef: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
       <input
         ref={ref}
         id={name}
+        style={{
+          "--border-color": currentColors[4],
+          "--border-hover-color": currentColors[6],
+        }}
         className={`
         w-full mx-auto px-3 py-3 
         rounded-xl outline-none duration-300
@@ -29,7 +35,7 @@ const InputWithRef: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
         ${
           isError
             ? "border-red-400 focus:border-red-600 hover:border-red-600"
-            : "border-green-400 focus:border-green-600 hover:border-green-600"
+            : "inputColors"
         }
         ${className}
        `}

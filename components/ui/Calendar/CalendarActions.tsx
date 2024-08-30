@@ -3,9 +3,11 @@
 import { Button } from "../Button";
 import { SECONDARY_FONT } from "@/constants";
 import { useCalendar } from "./CalendarContext";
+import { useUiColors } from "@/context/ColorsContext";
 
 export const CalendarActions = () => {
   const { changeMonth, goToTodayDay, displayCurrentDate } = useCalendar();
+  const { currentColors } = useUiColors();
 
   return (
     <div className="grid grid-cols-[1fr_minmax(130px,1fr)_1fr] grid-rows-2 gap-2 items-center">
@@ -22,11 +24,15 @@ export const CalendarActions = () => {
         className="ml-auto text-xl sm:text-2xl"
         onClick={() => changeMonth(-1)}
       >
-        <i className="fa-solid fa-circle-chevron-left text-green-400" />
+        <i
+          style={{ color: currentColors[4] }}
+          className="fa-solid fa-circle-chevron-left"
+        />
       </Button>
 
       <p
-        className={`text-lg sm:text-xl md:text-2xl text-green-600 text-center ${SECONDARY_FONT.className}`}
+        style={{ color: currentColors[6] }}
+        className={`text-lg sm:text-xl md:text-2xl text-center ${SECONDARY_FONT.className}`}
       >
         {displayCurrentDate}
       </p>
@@ -36,7 +42,10 @@ export const CalendarActions = () => {
         className="mr-auto text-xl sm:text-2xl"
         onClick={() => changeMonth(1)}
       >
-        <i className="fa-solid fa-circle-chevron-right text-green-400" />
+        <i
+          style={{ color: currentColors[4] }}
+          className="fa-solid fa-circle-chevron-right "
+        />
       </Button>
     </div>
   );

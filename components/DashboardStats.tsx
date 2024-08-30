@@ -6,6 +6,7 @@ import { SECONDARY_FONT, MOODS } from "@/constants";
 import { DocumentData } from "firebase/firestore";
 import { StatusesType } from "@/types";
 import { getClockNumbers } from "@/utils";
+import { useUiColors } from "@/context/ColorsContext";
 
 const END_OF_DAY = new Date();
 END_OF_DAY.setHours(23, 59, 59, 999);
@@ -15,6 +16,7 @@ type DashboardStatsProps = {
 };
 
 export const DashboardStats: FC<DashboardStatsProps> = ({ data }) => {
+  const { currentColors } = useUiColors();
   const { seconds, minutes, hours, restart, isRunning } = useTimer({
     expiryTimestamp: END_OF_DAY,
   });
@@ -58,7 +60,13 @@ export const DashboardStats: FC<DashboardStatsProps> = ({ data }) => {
   };
 
   return (
-    <div className="grid grid-cols-3 bg-green-50 text-green-500 rounded-lg p-4 gap-4">
+    <div
+      style={{
+        backgroundColor: currentColors[0],
+        color: currentColors[5],
+      }}
+      className="grid grid-cols-3 rounded-lg p-4 gap-4"
+    >
       {Object.entries(statuses).map(([key, status]) => {
         const replacedKey = key.replaceAll("_", " ");
 

@@ -1,3 +1,4 @@
+import { ChangeEvent, FC, FormEvent } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,11 +10,11 @@ import {
 } from "./ui/dialog";
 import {
   BASIC_BUTTON_CLASS_NAMES,
-  BUTTON_VARIANTS,
   Button,
   InputPassword,
+  getButtonColors,
 } from "./ui";
-import { ChangeEvent, FC, FormEvent } from "react";
+import { useUiColors } from "@/context/ColorsContext";
 
 type SettingsDeleteUserProps = {
   password: {
@@ -29,9 +30,16 @@ export const SettingsDeleteUser: FC<SettingsDeleteUserProps> = ({
   password,
   handleSubmitDelete,
 }) => {
+  const { currentColorName } = useUiColors();
+
   return (
     <Dialog onOpenChange={password.clearFields}>
-      <DialogTrigger className="text-red-500 hover:text-red-400 duration-300 font-semibold !p-2 mt-5 text-sm self-end">
+      <DialogTrigger
+        className={`
+          ${BASIC_BUTTON_CLASS_NAMES}
+          text-red-500 hover:text-red-400 duration-300 font-semibold mt-10 self-end border-none
+        `}
+      >
         Delete account
       </DialogTrigger>
       <DialogContent>
@@ -59,8 +67,9 @@ export const SettingsDeleteUser: FC<SettingsDeleteUserProps> = ({
             )}
             <div className="flex items-center justify-end gap-2">
               <DialogClose
+                style={getButtonColors(currentColorName, "outline")}
+                className={`${BASIC_BUTTON_CLASS_NAMES} elementColors`}
                 type="button"
-                className={`${BASIC_BUTTON_CLASS_NAMES} ${BUTTON_VARIANTS["outline"]}`}
               >
                 Cancel
               </DialogClose>

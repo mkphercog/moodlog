@@ -1,5 +1,6 @@
 import { ChangeEvent, FC } from "react";
 import { Button, Input } from "./ui";
+import { useUiColors } from "@/context/ColorsContext";
 
 type SettingsUserNameFormProps = {
   userName: {
@@ -18,13 +19,15 @@ type SettingsUserNameFormProps = {
 export const SettingsUserNameForm: FC<SettingsUserNameFormProps> = ({
   userName,
 }) => {
+  const { currentColors } = useUiColors();
+
   return (
     <form
       action={userName.submitNew}
       className="flex flex-col items-start w-full sm:max-w-[50%] gap-2"
     >
       <p className="text-xs">
-        Next user name change:{" "}
+        User name change:{" "}
         <span
           className={`font-semibold ${userName.canSet ? "text-green-600" : ""}`}
         >
@@ -46,11 +49,18 @@ export const SettingsUserNameForm: FC<SettingsUserNameFormProps> = ({
           disabled={!userName.canSet}
         />
         <Button
-          className="absolute top-0 right-0 bottom-0 w-[45px] hover:!bg-transparent hover:text-green-400 !p-0 disabled:border-transparent disabled:!bg-transparent"
+          style={{
+            "--text-color": currentColors[6],
+            "--text-hover-color": currentColors[4],
+          }}
+          className={`
+            flex items-center gap-0 !p-0 absolute top-0 right-0 bottom-0 w-[45px] border-none hover:!bg-transparent disabled:border-transparent disabled:!bg-transparent
+            textColors
+          `}
           variant="outline"
           disabled={!userName.canSet}
         >
-          <i className="fa-solid fa-paper-plane text-xl"></i>
+          <i className="fa-solid fa-paper-plane text-xl w-full"></i>
         </Button>
       </div>
       <p className="text-xs">

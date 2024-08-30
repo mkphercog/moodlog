@@ -7,7 +7,7 @@ export default function NotFound() {
     <Main>
       <div className="flex-1 flex flex-col gap-14 items-center justify-center">
         <h2
-          className={`text-5xl sm:text-6xl !leading-[initial] text-center textGradient ${SECONDARY_FONT.className}`}
+          className={`text-5xl sm:text-6xl !leading-[initial] text-center ${SECONDARY_FONT.className}`}
         >
           Where is your mood?
         </h2>
