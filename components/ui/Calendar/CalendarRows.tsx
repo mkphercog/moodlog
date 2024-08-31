@@ -26,7 +26,11 @@ export const CalendarRows = () => {
               }
 
               return (
-                <CalendarRowItem key={dayOfWeekIndex} dayNumber={dayNumber} />
+                <CalendarRowItem
+                  key={dayOfWeekIndex}
+                  dayNumber={dayNumber}
+                  dayOfWeekIndex={dayOfWeekIndex}
+                />
               );
             })}
           </div>

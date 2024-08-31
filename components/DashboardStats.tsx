@@ -2,7 +2,7 @@
 
 import { FC, useEffect } from "react";
 import { useTimer } from "react-timer-hook";
-import { SECONDARY_FONT, MOODS } from "@/constants";
+import { SECONDARY_FONT, MOODS_LIST } from "@/constants";
 import { DocumentData } from "firebase/firestore";
 import { StatusesType } from "@/types";
 import { getClockNumbers } from "@/utils";
@@ -53,7 +53,7 @@ export const DashboardStats: FC<DashboardStatsProps> = ({ data }) => {
 
   const statuses: StatusesType = {
     total_days: countValues().numDays,
-    average_mood: `${countValues().averageMood}/${Object.keys(MOODS).length}`,
+    average_mood: `${countValues().averageMood}/${MOODS_LIST.length}`,
     time_remaining: `${getClockNumbers(hours)}:${getClockNumbers(
       minutes
     )}:${getClockNumbers(seconds)}`,
@@ -76,7 +76,7 @@ export const DashboardStats: FC<DashboardStatsProps> = ({ data }) => {
               {replacedKey}
             </p>
             <p
-              className={`text-lg sm:text-xl truncate ${SECONDARY_FONT.className}`}
+              className={`text-xl sm:text-2xl truncate ${SECONDARY_FONT.className}`}
             >
               {status}
             </p>

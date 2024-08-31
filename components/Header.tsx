@@ -5,15 +5,19 @@ import { Settings } from "./Settings";
 import Link from "next/link";
 import { SECONDARY_FONT } from "@/constants";
 import { useUiColors } from "@/context/ColorsContext";
+import { usePathname } from "next/navigation";
 
 export const Header = () => {
+  const pathname = usePathname();
   const { currentUser } = useAuth();
   const { currentColors } = useUiColors();
 
   const userName = currentUser?.displayName;
 
+  if (pathname !== "/dashboard") return null;
+
   return (
-    <header className="p-4 sm:p-8 flex items-center justify-between gap-4">
+    <header className="px-4 py-3 sm:px-8 sm:py-6 flex items-center justify-between gap-4 sticky top-0 bg-white z-50">
       <Link href={"/"}>
         <h1
           style={{

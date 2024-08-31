@@ -1,3 +1,4 @@
+export * from "./AnimatedEmoji/AnimatedEmoji";
 export * from "./Button";
 export * from "./Calendar/";
 export * from "./Input";

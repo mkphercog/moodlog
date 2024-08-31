@@ -3,10 +3,12 @@
 import { DocumentData, doc, setDoc } from "firebase/firestore";
 import { db } from "@/firebase";
 import { Login, DashboardStats } from "./";
-import { Button, Calendar, Loading } from "./ui";
-import { SECONDARY_FONT, MOODS } from "@/constants";
+import { AnimatedEmoji, Button, Calendar, Loading } from "./ui";
+import { SECONDARY_FONT, MOODS_LIST } from "@/constants";
 import { useAuth } from "@/context/AuthContext";
 import { useUiColors } from "@/context/ColorsContext";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 const NOW = new Date();
 const year = NOW.getFullYear();
@@ -15,7 +17,25 @@ const day = NOW.getDate();
 
 export const Dashboard = () => {
   const { currentUser, userData, setUserData, loading } = useAuth();
+  const searchParams = useSearchParams();
   const { currentColors } = useUiColors();
+  const [currentAnimatedEmojiIndex, setCurrentAnimatedEmojiIndex] = useState(1);
+
+  const canAnimate = !(searchParams.get("mode") === "settings");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentAnimatedEmojiIndex((stateIndex) => {
+        if (stateIndex === MOODS_LIST.length) {
+          return 1;
+        }
+
+        return (stateIndex += 1);
+      });
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSetMood = async (mood: number) => {
     try {
@@ -73,20 +93,21 @@ export const Dashboard = () => {
         </span>{" "}
         today?
       </h4>
-      <div className="grid grid-cols-2 md:grid-cols-6 lg:grid-cols-5 gap-4">
-        {Object.entries(MOODS).map(([key, mood], index) => {
+      <div className="grid grid-cols-2 md:grid-cols-8 lg:grid-cols-7 gap-4">
+        {MOODS_LIST.map((mood) => {
           const selectedUserMood = userData?.[year]?.[month]?.[day];
 
           return (
             <Button
-              onClick={() => handleSetMood(index + 1)}
+              key={mood.id}
+              onClick={() => handleSetMood(mood.scaleValue)}
               style={{
                 "--bg-color":
-                  selectedUserMood - 1 === index
+                  selectedUserMood === mood.scaleValue
                     ? currentColors[1]
                     : "transparent",
                 "--bg-hover-color":
-                  selectedUserMood - 1 === index
+                  selectedUserMood === mood.scaleValue
                     ? currentColors[1]
                     : currentColors[0],
                 "--border-color": "transparent",
@@ -95,26 +116,39 @@ export const Dashboard = () => {
                 "--text-hover-color": currentColors[6],
               }}
               className={`
+                !px-0 !py-5
                 flex flex-col gap-2 items-center 
                 purpleShadow
                 md:col-span-2 lg:col-span-1
-                last:col-span-2 last:md:col-span-3 last:lg:col-span-1 
-                md:[&:nth-child(4)]:col-span-3 lg:[&:nth-child(4)]:col-span-1
+                last:col-span-2 last:md:col-span-4 last:lg:col-span-1
                 ${
-                  selectedUserMood - 1 === index
+                  selectedUserMood === mood.scaleValue
                     ? "cursor-not-allowed selectedMood"
                     : ""
                 }
               `}
               variant="outline"
-              key={index}
             >
-              <p className="text-4xl sm:text-5xl md:text-6xl !leading-[initial]">
-                {mood}
-              </p>
-              <p className="text-xs sm:text-sm md:text-base first-letter:uppercase">
-                {key}
-              </p>
+              {
+                <AnimatedEmoji
+                  canAnimate={
+                    canAnimate &&
+                    (selectedUserMood === mood.scaleValue ||
+                      currentAnimatedEmojiIndex === mood.scaleValue)
+                  }
+                  emojiVariant={mood.animatedEmojiVariant}
+                  className={`
+                    duration-300 w-[80px] h-[80px] sm:w-[100px] sm:h-[100px]
+                    ${
+                      canAnimate &&
+                      currentAnimatedEmojiIndex === mood.scaleValue
+                        ? "scale-[1.33]"
+                        : ""
+                    }
+                  `}
+                />
+              }
+              <p className="text-sm sm:text-base truncate">{mood.name}</p>
             </Button>
           );
         })}

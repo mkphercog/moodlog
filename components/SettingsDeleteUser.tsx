@@ -9,6 +9,7 @@ import {
   DialogClose,
 } from "./ui/dialog";
 import {
+  AnimatedEmoji,
   BASIC_BUTTON_CLASS_NAMES,
   Button,
   InputPassword,
@@ -65,7 +66,7 @@ export const SettingsDeleteUser: FC<SettingsDeleteUserProps> = ({
                 {password.error}
               </p>
             )}
-            <div className="flex items-center justify-end gap-2">
+            <div className="flex items-center justify-between gap-2">
               <DialogClose
                 style={getButtonColors(currentColorName, "outline")}
                 className={`${BASIC_BUTTON_CLASS_NAMES} elementColors`}
@@ -73,6 +74,11 @@ export const SettingsDeleteUser: FC<SettingsDeleteUserProps> = ({
               >
                 Cancel
               </DialogClose>
+              <AnimatedEmoji
+                canAnimate
+                emojiVariant="pleading"
+                className="w-16 h-16"
+              />
               <Button variant="destructive">Delete</Button>
             </div>
           </form>

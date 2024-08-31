@@ -10,7 +10,7 @@ export const Calendar = () => {
     <CalendarProvider>
       <div className="flex flex-col gap-2">
         <CalendarActions />
-        <div className="p-1 sm:p-2">
+        <div>
           <CalendarColumnNames />
           <CalendarRows />
         </div>

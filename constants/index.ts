@@ -1,4 +1,4 @@
-import { ErrorMessagesType } from "@/types";
+import { EmojiVariantType, ErrorMessagesType, MoodItemType } from "@/types";
 import { Nerko_One, Nunito } from "next/font/google";
 
 export const PRIMARY_FONT = Nunito({ subsets: ["latin"], weight: ["400"] });
@@ -7,13 +7,78 @@ export const SECONDARY_FONT = Nerko_One({
   weight: ["400"],
 });
 
-export const MOODS = {
-  "@$#%&*!": "😡",
-  sad: "😢",
-  existing: "😶",
-  good: "😊",
-  excellent: "😍",
-};
+export const MOODS_LIST: MoodItemType[] = [
+  {
+    id: "mood_1",
+    scaleValue: 1,
+    name: "@$#%&*!",
+    emoji: "😡",
+    animatedEmojiVariant: "angry",
+  },
+  {
+    id: "mood_2",
+    scaleValue: 2,
+    name: "Sad",
+    emoji: "😢",
+    animatedEmojiVariant: "cry",
+  },
+  {
+    id: "mood_3",
+    scaleValue: 3,
+    name: "Slightly unhappy",
+    emoji: "😞",
+    animatedEmojiVariant: "sad",
+  },
+  {
+    id: "mood_4",
+    scaleValue: 4,
+    name: "Neutral",
+    emoji: "😐",
+    animatedEmojiVariant: "neutral-face",
+  },
+  {
+    id: "mood_5",
+    scaleValue: 5,
+    name: "Slightly happy",
+    emoji: "😌",
+    animatedEmojiVariant: "relieved",
+  },
+  {
+    id: "mood_6",
+    scaleValue: 6,
+    name: "Happy",
+    emoji: "😀",
+    animatedEmojiVariant: "smile",
+  },
+  {
+    id: "mood_7",
+    scaleValue: 7,
+    name: "Excellent mood",
+    emoji: "🤩",
+    animatedEmojiVariant: "star-face",
+  },
+];
+
+export const EMOJI_VARIANT_NAMES_LIST: EmojiVariantType[] = [
+  "angry-symbols",
+  "angry",
+  "cool",
+  "cry",
+  "grinning",
+  "heart-eyes",
+  "heart-face",
+  "laughing",
+  "loud-cry",
+  "monocle",
+  "neutral-face",
+  "no-mouth",
+  "party-face",
+  "pleading",
+  "relieved",
+  "sad",
+  "smile",
+  "star-face",
+];
 
 export const DAY_LIST = [
   "Monday",
@@ -192,11 +257,11 @@ export const COLORS: Record<string, string[]> = {
 export const LANDING_PAGE_MOODS: Record<string, number> = {
   "0": 2,
   "1": 5,
-  "2": 4,
+  "2": 7,
   "3": 1,
   "4": 3,
   "5": 2,
-  "6": 4,
+  "6": 7,
   "7": 1,
   "8": 5,
   "9": 3,
@@ -206,32 +271,32 @@ export const LANDING_PAGE_MOODS: Record<string, number> = {
   "13": 3,
   "14": 5,
   "15": 2,
-  "16": 4,
+  "16": 6,
   "17": 1,
   "18": 3,
-  "19": 5,
+  "19": 6,
   "20": 2,
   "21": 4,
   "22": 1,
-  "23": 3,
+  "23": 7,
   "24": 5,
   "25": 3,
   "26": 4,
   "27": 2,
   "28": 1,
   "29": 2,
-  "30": 4,
+  "30": 6,
   "31": 1,
   "32": 3,
   "33": 5,
   "34": 2,
-  "35": 4,
+  "35": 7,
   "36": 1,
   "37": 5,
   "38": 3,
   "39": 2,
   "40": 5,
-  "41": 4,
+  "41": 6,
   "42": 1,
   "43": 3,
 };

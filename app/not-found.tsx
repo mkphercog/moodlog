@@ -1,4 +1,4 @@
-import { Button, Main } from "@/components/ui";
+import { AnimatedEmoji, Button, Main } from "@/components/ui";
 import { SECONDARY_FONT } from "@/constants";
 import Link from "next/link";
 
@@ -11,9 +11,9 @@ export default function NotFound() {
         >
           Where is your mood?
         </h2>
-        <p className="text-4xl sm:text-5xl md:text-6xl">🤔</p>
+        <AnimatedEmoji canAnimate emojiVariant="monocle" />
         <Link href="/">
-          <Button variant="dark">Check on the home page 😍</Button>
+          <Button variant="dark">Check on the home page</Button>
         </Link>
       </div>
     </Main>

@@ -12,10 +12,15 @@ import { SettingsUserNameForm } from "./SettingsUserNameForm";
 import { SettingsDeleteUser } from "./SettingsDeleteUser";
 import { useUiColors } from "@/context/ColorsContext";
 import { SettingsUiColors } from "./SettingsUiColors";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const Settings = () => {
   const { userName, password, logOut, handleSubmitDelete } = useSettings();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const { currentColors, resetColor } = useUiColors();
+
+  const isSettingsPath = searchParams.get("mode") === "settings";
 
   const handleLogOut = async () => {
     await logOut();
@@ -23,7 +28,13 @@ export const Settings = () => {
   };
 
   return (
-    <Sheet onOpenChange={userName.clearFields}>
+    <Sheet
+      onOpenChange={() => {
+        router.push(`/dashboard${isSettingsPath ? "" : "?mode=settings"}`);
+        userName.clearFields();
+      }}
+      open={isSettingsPath}
+    >
       <SheetTrigger className="text-2xl outline-none">
         <i
           style={{
