@@ -96,12 +96,8 @@ export const useSettings = () => {
     const docRef = doc(db, "users", currentUser.uid);
     await setDoc(
       docRef,
-      {
-        nextDateChangeUserName: now.getTime(),
-      },
-      {
-        merge: true,
-      }
+      { settings: { nextDateChangeUserName: now.getTime() } },
+      { merge: true }
     );
   };
 
@@ -126,29 +122,26 @@ export const useSettings = () => {
   };
 
   useEffect(() => {
-    const getTime = async () => {
+    const getNextDateChange = async () => {
       if (!currentUser) return;
       const docRef = doc(db, "users", currentUser.uid);
       const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists() && docSnap.data().nextDateChangeUserName) {
-        restart(docSnap.data().nextDateChangeUserName, true);
+      if (docSnap.exists() && docSnap.data().settings) {
+        const { nextDateChangeUserName } = docSnap.data().settings;
+        restart(nextDateChangeUserName, true);
         setCanSetUserName(false);
         return;
       } else {
         await setDoc(
           docRef,
-          {
-            nextDateChangeUserName: new Date().getTime(),
-          },
-          {
-            merge: true,
-          }
+          { settings: { nextDateChangeUserName: new Date().getTime() } },
+          { merge: true }
         );
       }
     };
 
-    getTime();
+    getNextDateChange();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser?.displayName]);
 

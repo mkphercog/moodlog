@@ -19,7 +19,7 @@ const currentYear = NOW.getFullYear();
 
 type CalendarContextType = {
   isLandingPage: boolean;
-  userData: DocumentData;
+  userMoodsData: DocumentData;
   rowsNum: number;
   daysInMonth: number;
   firstDayOfMonth: number;
@@ -43,11 +43,11 @@ export const CalendarProvider: FC<PropsWithChildren> = ({ children }) => {
   const pathName = usePathname();
   const isLandingPage = pathName === "/";
 
-  const { userData } = useAuth();
+  const { userMoodsData } = useAuth();
   const [selectedMonth, setSelectedMonth] = useState(MONTHS_LIST[currentMonth]);
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const numericMonth = MONTHS_LIST.indexOf(selectedMonth);
-  const data = userData?.[selectedYear]?.[numericMonth] || {};
+  const data = userMoodsData?.[selectedYear]?.[numericMonth] || {};
 
   const displayedMonth = new Date(
     selectedYear,
@@ -83,7 +83,7 @@ export const CalendarProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const value = {
     isLandingPage,
-    userData: data,
+    userMoodsData: data,
     rowsNum,
     firstDayOfMonth,
     daysInMonth,

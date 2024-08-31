@@ -33,7 +33,7 @@ export const UiColorsProvider: FC<PropsWithChildren> = ({ children }) => {
     setCurrentColor(newColor);
 
     const docRef = doc(db, "users", currentUser?.uid || "");
-    await setDoc(docRef, { uiColor: newColor }, { merge: true });
+    await setDoc(docRef, { settings: { uiColor: newColor } }, { merge: true });
   };
 
   useEffect(() => {
@@ -43,10 +43,15 @@ export const UiColorsProvider: FC<PropsWithChildren> = ({ children }) => {
       const docRef = doc(db, "users", currentUser.uid);
       const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists() && docSnap.data().uiColor) {
-        setCurrentColor(docSnap.data().uiColor);
+      if (docSnap.exists() && docSnap.data().settings) {
+        const { uiColor } = docSnap.data().settings;
+        setCurrentColor(uiColor);
       } else {
-        setDoc(docRef, { uiColor: "green" }, { merge: true });
+        await setDoc(
+          docRef,
+          { settings: { uiColor: "green" } },
+          { merge: true }
+        );
       }
     };
 

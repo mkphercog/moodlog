@@ -1,10 +1,5 @@
 import { FC } from "react";
-import {
-  DAY_LIST,
-  LANDING_PAGE_MOODS,
-  MONTHS_LIST,
-  MOODS_LIST,
-} from "@/constants";
+import { DAY_LIST, MONTHS_LIST, MOODS_LIST } from "@/constants";
 import {
   Popover,
   PopoverContent,
@@ -17,14 +12,15 @@ import { MoodItemType } from "@/types";
 type CalendarRowItemProps = {
   dayNumber: number;
   dayOfWeekIndex: number;
+  currentDayMoodValue: number | undefined;
 };
 
 export const CalendarRowItem: FC<CalendarRowItemProps> = ({
   dayNumber,
   dayOfWeekIndex,
+  currentDayMoodValue,
 }) => {
-  const { isLandingPage, userData, now, selectedMonth, selectedYear } =
-    useCalendar();
+  const { now, selectedMonth, selectedYear } = useCalendar();
   const { currentColors } = useUiColors();
 
   const isToday =
@@ -32,34 +28,9 @@ export const CalendarRowItem: FC<CalendarRowItemProps> = ({
     selectedMonth === MONTHS_LIST[now.month] &&
     selectedYear === now.year;
 
-  const bgColor = isLandingPage
-    ? currentColors[LANDING_PAGE_MOODS[dayNumber] + 2]
-    : dayNumber in userData
-    ? currentColors[userData[dayNumber] + 2]
-    : "transparent";
-  const textColor = bgColor === "transparent" ? currentColors[5] : "white";
-  const borderColor = isToday ? currentColors[10] : "transparent";
-
-  const emojiBgColor = isLandingPage
-    ? currentColors[0]
-    : dayNumber in userData
-    ? currentColors[0]
-    : "transparent";
-  const emojiBorderColor = isLandingPage
-    ? currentColors[LANDING_PAGE_MOODS[dayNumber] + 3]
-    : dayNumber in userData
-    ? currentColors[userData[dayNumber] + 3]
-    : "transparent";
-
-  const demoMoodSymbol =
-    MOODS_LIST.find(
-      (mood) => mood.scaleValue === LANDING_PAGE_MOODS[dayNumber]
-    ) || ({} as MoodItemType);
-
-  const userMoodSymbol =
-    dayNumber in userData
-      ? MOODS_LIST.find((mood) => mood.scaleValue === userData[dayNumber])
-      : ({} as MoodItemType);
+  const moodData = MOODS_LIST.find(
+    (mood) => mood.scaleValue === currentDayMoodValue
+  );
 
   return (
     <Popover>
@@ -68,13 +39,15 @@ export const CalendarRowItem: FC<CalendarRowItemProps> = ({
           "--bg-color": "transparent",
         }}
         className="duration-300 elementColors"
-        disabled={isLandingPage ? false : !userMoodSymbol?.scaleValue}
+        disabled={!currentDayMoodValue}
       >
         <div
           style={{
-            backgroundColor: bgColor,
-            color: textColor,
-            borderColor: borderColor,
+            backgroundColor: currentDayMoodValue
+              ? currentColors[currentDayMoodValue + 2]
+              : "transparent",
+            color: currentDayMoodValue ? currentColors[1] : currentColors[6],
+            borderColor: isToday ? currentColors[10] : "transparent",
           }}
           className={`
             flex flex-col items-start justify-center gap-1 sm:gap-2  
@@ -87,35 +60,56 @@ export const CalendarRowItem: FC<CalendarRowItemProps> = ({
           </p>
           <div
             style={{
-              backgroundColor: emojiBgColor,
-              border: `1px solid ${emojiBorderColor}`,
+              backgroundColor: currentDayMoodValue
+                ? currentColors[0]
+                : "transparent",
+              border: `1px solid ${
+                currentDayMoodValue
+                  ? currentColors[currentDayMoodValue + 3]
+                  : "transparent"
+              }`,
             }}
             className="flex items-center justify-center w-full h-6 shrink-0 rounded-lg py-2 sm:py-4 bg-white"
           >
-            <p className="">
-              {isLandingPage ? demoMoodSymbol?.emoji : userMoodSymbol?.emoji}
-            </p>
+            <p>{moodData?.emoji}</p>
           </div>
         </div>
-
-        <PopoverContent>
-          <p style={{ color: currentColors[6] }} className="font-semibold">
-            {dayNumber}. {DAY_LIST[dayOfWeekIndex]}
-          </p>
-          <p>
-            {isLandingPage ? demoMoodSymbol?.emoji : userMoodSymbol?.emoji} -{" "}
-            {isLandingPage ? demoMoodSymbol?.name : userMoodSymbol?.name}
-          </p>
-          <p>
-            Mood scale value:{" "}
-            <span style={{ color: currentColors[6] }} className="font-semibold">
-              {isLandingPage
-                ? demoMoodSymbol?.scaleValue
-                : userMoodSymbol?.scaleValue}
-            </span>
-          </p>
-        </PopoverContent>
       </PopoverTrigger>
+
+      <ItemPopoverContent
+        dayNumber={dayNumber}
+        dayOfWeekIndex={dayOfWeekIndex}
+        moodData={moodData}
+      />
     </Popover>
+  );
+};
+
+type ItemPopoverContent = {
+  dayNumber: number;
+  dayOfWeekIndex: number;
+  moodData: MoodItemType | undefined;
+};
+
+const ItemPopoverContent: FC<ItemPopoverContent> = ({
+  dayNumber,
+  dayOfWeekIndex,
+  moodData,
+}) => {
+  const { currentColors } = useUiColors();
+
+  return (
+    <PopoverContent>
+      <p style={{ color: currentColors[6] }} className="font-semibold">
+        {dayNumber}. {DAY_LIST[dayOfWeekIndex]}
+      </p>
+      <p>{`${moodData?.emoji} - ${moodData?.name}`}</p>
+      <p>
+        Mood scale value:{" "}
+        <span style={{ color: currentColors[6] }} className="font-semibold">
+          {moodData?.scaleValue}
+        </span>
+      </p>
+    </PopoverContent>
   );
 };

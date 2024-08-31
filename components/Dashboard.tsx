@@ -16,7 +16,7 @@ const month = NOW.getMonth();
 const day = NOW.getDate();
 
 export const Dashboard = () => {
-  const { currentUser, userData, setUserData, loading } = useAuth();
+  const { currentUser, userMoodsData, setUserMoodsData, loading } = useAuth();
   const searchParams = useSearchParams();
   const { currentColors } = useUiColors();
   const [currentAnimatedEmojiIndex, setCurrentAnimatedEmojiIndex] = useState(1);
@@ -39,24 +39,24 @@ export const Dashboard = () => {
 
   const handleSetMood = async (mood: number) => {
     try {
-      const newData: DocumentData = { ...userData };
+      const newData: DocumentData = { ...userMoodsData };
       if (!newData?.[year]) {
         newData[year] = {};
       }
       if (!newData?.[year]?.[month]) {
         newData[year][month] = {};
       }
-      if (userData?.[year]?.[month]?.[day] === mood) {
+      if (userMoodsData?.[year]?.[month]?.[day] === mood) {
         return;
       }
       newData[year][month][day] = mood;
 
-      setUserData(newData);
+      setUserMoodsData(newData);
       const docRef = doc(db, "users", currentUser?.uid || "");
       await setDoc(
         docRef,
         {
-          [year]: { [month]: { [day]: mood } },
+          moods: { [year]: { [month]: { [day]: mood } } },
         },
         {
           merge: true,
@@ -77,7 +77,7 @@ export const Dashboard = () => {
 
   return (
     <div className="flex flex-col flex-1 gap-8 sm:gap-12 md:gap-16">
-      <DashboardStats data={userData} />
+      <DashboardStats data={userMoodsData} />
       <h4
         className={`text-5xl sm:text-6xl md:text-7xl text-center !leading-[initial] ${SECONDARY_FONT.className}`}
       >
@@ -95,7 +95,7 @@ export const Dashboard = () => {
       </h4>
       <div className="grid grid-cols-2 md:grid-cols-8 lg:grid-cols-7 gap-4">
         {MOODS_LIST.map((mood) => {
-          const selectedUserMood = userData?.[year]?.[month]?.[day];
+          const selectedUserMood = userMoodsData?.[year]?.[month]?.[day];
 
           return (
             <Button

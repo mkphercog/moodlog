@@ -13,7 +13,7 @@ export default function NotFound() {
         </h2>
         <AnimatedEmoji canAnimate emojiVariant="monocle" />
         <Link href="/">
-          <Button variant="dark">Check on the home page</Button>
+          <Button variant="dark">Check on the Home page</Button>
         </Link>
       </div>
     </Main>

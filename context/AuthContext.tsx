@@ -31,7 +31,8 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
   const [currentUser, setCurrentUser] =
     useState<AuthContextType["currentUser"]>(null);
-  const [userData, setUserData] = useState<AuthContextType["userData"]>(null);
+  const [userMoodsData, setUserMoodsData] =
+    useState<AuthContextType["userMoodsData"]>(null);
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState<ErrorMessagesType>("none");
 
@@ -96,7 +97,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const logOut: AuthContextType["logOut"] = (shouldRedirect = true) => {
     setCurrentUser(null);
-    setUserData(null);
+    setUserMoodsData(null);
 
     if (shouldRedirect) {
       router.replace("/");
@@ -107,16 +108,17 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const updateUserName = async (userName: string) => {
     if (!auth.currentUser) return;
+    const userNameTrimed = userName.trim();
 
     await updateProfile(auth.currentUser, {
-      displayName: userName,
+      displayName: userNameTrimed,
     });
     await auth.currentUser
       .reload()
       .then(() => {
         setCurrentUser(auth.currentUser);
 
-        const toastMessage = userName
+        const toastMessage = userNameTrimed
           ? `User name "${auth.currentUser?.displayName}" set correctly.`
           : "User name deleted correctly.";
 
@@ -148,9 +150,8 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          const { nextDateChangeUserName, uiColor, ...restData } =
-            docSnap.data();
-          setUserData(restData);
+          const { moods } = docSnap.data();
+          setUserMoodsData(moods);
         }
       } catch (error) {
         console.error("User data not found, ", error);
@@ -167,8 +168,8 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     currentUser,
     authError,
     setAuthError,
-    userData,
-    setUserData,
+    userMoodsData,
+    setUserMoodsData,
     updateUserName,
     signUp,
     logIn,

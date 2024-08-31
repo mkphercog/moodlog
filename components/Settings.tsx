@@ -53,7 +53,7 @@ export const Settings = () => {
           <SheetDescription>{userName.settingsDesc}</SheetDescription>
         </SheetHeader>
         <div className="flex flex-col items-start">
-          <Button variant="outline" className="self-end" onClick={handleLogOut}>
+          <Button variant="light" className="self-end" onClick={handleLogOut}>
             Logout
           </Button>
 
