@@ -69,7 +69,9 @@ const AnimatedEmojiComponent: FC<AnimatedEmojiProps> = ({
   const emojiRef = useRef<LottieRefCurrentProps | null>(null);
 
   useEffect(() => {
-    typeof window !== undefined && setIsMounted(true);
+    if (typeof window === "undefined") return;
+
+    setIsMounted(true);
   }, []);
 
   useEffect(() => {

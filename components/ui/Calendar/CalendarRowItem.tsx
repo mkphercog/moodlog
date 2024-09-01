@@ -1,3 +1,5 @@
+"use client";
+
 import { FC } from "react";
 import { DAY_LIST, MONTHS_LIST, MOODS_LIST } from "@/constants";
 import {

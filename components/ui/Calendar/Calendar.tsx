@@ -1,5 +1,3 @@
-"use client";
-
 import { CalendarProvider } from "./CalendarContext";
 import { CalendarActions } from "./CalendarActions";
 import { CalendarColumnNames } from "./CalendarColumnNames";

@@ -1,3 +1,5 @@
+"use client";
+
 import { COLORS } from "@/constants";
 import { useUiColors } from "@/context/ColorsContext";
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { ChangeEvent, FC } from "react";
 import { Button, Input } from "./ui";
 import { useUiColors } from "@/context/ColorsContext";

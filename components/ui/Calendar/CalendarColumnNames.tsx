@@ -1,3 +1,5 @@
+"use client";
+
 import { DAY_LIST, SECONDARY_FONT } from "@/constants";
 import { useUiColors } from "@/context/ColorsContext";
 import { useScreenSize } from "@/hooks/useScreenSize";

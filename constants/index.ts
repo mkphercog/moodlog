@@ -1,10 +1,15 @@
 import { EmojiVariantType, ErrorMessagesType, MoodItemType } from "@/types";
 import { Nerko_One, Nunito } from "next/font/google";
 
-export const PRIMARY_FONT = Nunito({ subsets: ["latin"], weight: ["400"] });
+export const PRIMARY_FONT = Nunito({
+  subsets: ["latin"],
+  weight: ["400"],
+  preload: false,
+});
 export const SECONDARY_FONT = Nerko_One({
   subsets: ["latin"],
   weight: ["400"],
+  preload: false,
 });
 
 export const MOODS_LIST: MoodItemType[] = [

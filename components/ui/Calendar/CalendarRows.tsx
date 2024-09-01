@@ -1,3 +1,5 @@
+"use client";
+
 import { CalendarRowItem } from "./CalendarRowItem";
 import { DAY_LIST, LANDING_PAGE_MOODS, MONTHS_LIST } from "@/constants";
 import { useCalendar } from "./CalendarContext";

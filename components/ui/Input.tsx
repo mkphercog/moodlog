@@ -1,3 +1,5 @@
+"use client";
+
 import { useUiColors } from "@/context/ColorsContext";
 import {
   ForwardRefRenderFunction,
