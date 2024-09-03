@@ -4,16 +4,14 @@ import { useToast } from "@/components/ui/use-toast";
 import { ERROR_MESSAGES, USER_NAME_MAX_LENGTH } from "@/constants";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/firebase";
-import { getClockNumbers } from "@/utils";
 import {
   EmailAuthProvider,
   deleteUser,
   reauthenticateWithCredential,
 } from "firebase/auth";
-import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useTimer } from "react-timer-hook";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 export const useSettings = () => {
   const { toast } = useToast();
@@ -24,12 +22,6 @@ export const useSettings = () => {
   const [userNameError, setUserNameError] = useState<string | null>(null);
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState<string | null>("");
-  const { hours, minutes, seconds, restart } = useTimer({
-    expiryTimestamp: new Date(),
-    onExpire: () => {
-      setCanSetUserName(true);
-    },
-  });
 
   const handleSubmitDelete = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -106,12 +98,6 @@ export const useSettings = () => {
     setUserNameError(null);
   };
 
-  const userNameChangeAvailability = !canSetUserName
-    ? `${getClockNumbers(hours)}:${getClockNumbers(minutes)}:${getClockNumbers(
-        seconds
-      )}`
-    : "available";
-
   const userNameSettingsDesc = currentUser?.displayName
     ? `${currentUser.displayName}'s account.`
     : "";
@@ -120,30 +106,6 @@ export const useSettings = () => {
     setUserName(e.target.value);
     setUserNameError(null);
   };
-
-  useEffect(() => {
-    const getNextDateChange = async () => {
-      if (!currentUser) return;
-      const docRef = doc(db, "users", currentUser.uid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists() && docSnap.data().settings) {
-        const { nextDateChangeUserName } = docSnap.data().settings;
-        restart(nextDateChangeUserName, true);
-        setCanSetUserName(false);
-        return;
-      } else {
-        await setDoc(
-          docRef,
-          { settings: { nextDateChangeUserName: new Date().getTime() } },
-          { merge: true }
-        );
-      }
-    };
-
-    getNextDateChange();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser?.displayName]);
 
   const clearPasswordFields = () => {
     setPassword("");
@@ -164,8 +126,8 @@ export const useSettings = () => {
       settingsDesc: userNameSettingsDesc,
       clearFields: clearUserNameFields,
       canSet: canSetUserName,
+      updateCanSet: (value: boolean) => setCanSetUserName(value),
       submitNew: handleSubmitNewUserName,
-      changeAvailability: userNameChangeAvailability,
       onChange: userNameOnChange,
       error: userNameError,
     },

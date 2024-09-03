@@ -43,9 +43,10 @@ export const UiColorsProvider: FC<PropsWithChildren> = ({ children }) => {
       const docRef = doc(db, "users", currentUser.uid);
       const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists() && docSnap.data().settings) {
-        const { uiColor } = docSnap.data().settings;
-        setCurrentColor(uiColor);
+      const settings = docSnap.get("settings");
+
+      if (docSnap.exists() && settings && settings.uiColor) {
+        setCurrentColor(settings.uiColor);
       } else {
         await setDoc(
           docRef,

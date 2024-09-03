@@ -15,14 +15,17 @@ import { SettingsDeleteUser } from "./SettingsDeleteUser";
 import { useUiColors } from "@/context/ColorsContext";
 import { SettingsUiColors } from "./SettingsUiColors";
 import { useRouter, useSearchParams } from "next/navigation";
+import { memo, useMemo } from "react";
 
-export const Settings = () => {
+export const SettingsComponent = () => {
   const { userName, password, logOut, handleSubmitDelete } = useSettings();
   const searchParams = useSearchParams();
   const router = useRouter();
   const { currentColors, resetColor } = useUiColors();
 
-  const isSettingsPath = searchParams.get("mode") === "settings";
+  const isSettingsPath = useMemo(() => {
+    return searchParams.get("mode") === "settings";
+  }, [searchParams]);
 
   const handleLogOut = async () => {
     await logOut();
@@ -37,13 +40,13 @@ export const Settings = () => {
       }}
       open={isSettingsPath}
     >
-      <SheetTrigger className="text-2xl outline-none">
+      <SheetTrigger className="w-8 h-8 flex items-center rounded-full justify-center text-2xl outline-none duration-300 hover:rotate-90">
         <i
           style={{
             "--text-color": currentColors[6],
             "--text-hover-color": currentColors[5],
           }}
-          className="fa-solid fa-gear duration-300 hover:rotate-90 textColors"
+          className="fa-solid fa-gear textColors pointer-events-none"
         />
       </SheetTrigger>
       <SheetContent
@@ -70,3 +73,5 @@ export const Settings = () => {
     </Sheet>
   );
 };
+
+export const Settings = memo(SettingsComponent);

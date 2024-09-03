@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Mood.log()
 
-## Getting Started
+Welcome to the repository of Mood.log(). 😍 This app helps you to track your daily mood. Create your mood record and see how you feel on every day of every year.
 
-First, run the development server:
+## Tech stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Typescript
+- Next.js
+- Firebase
+- Tailwind
+- Radix
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+All emoji animations come from [this repo](https://github.com/benlhachemi/reactemojis)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Features
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- registration, log in and delete your account with all saved data
+- tracking your daily mood
+- settings: change your username, change UI color
+- very nice looking emoji animations 🤩
 
-## Learn More
+#### Future features
 
-To learn more about Next.js, take a look at the following resources:
+- add comment to the day
+- delete the current mood of the day
+- statistics for the current month and in total
+- log in with your Google account
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[**Live here**](https://moodlog-mh.netlify.app/)

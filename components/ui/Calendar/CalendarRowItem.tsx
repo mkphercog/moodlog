@@ -10,6 +10,7 @@ import {
 import { useCalendar } from "./CalendarContext";
 import { useUiColors } from "@/context/ColorsContext";
 import { MoodItemType } from "@/types";
+import { useCurrentDate } from "@/context/CurrentDateContext";
 
 type CalendarRowItemProps = {
   dayNumber: number;
@@ -22,13 +23,16 @@ export const CalendarRowItem: FC<CalendarRowItemProps> = ({
   dayOfWeekIndex,
   currentDayMoodValue,
 }) => {
-  const { now, selectedMonth, selectedYear } = useCalendar();
+  const { selectedYear, selectedMonth } = useCalendar();
+  const {
+    currentDate: { YEAR, MONTH, DAY },
+  } = useCurrentDate();
   const { currentColors } = useUiColors();
 
   const isToday =
-    dayNumber === now.day &&
-    selectedMonth === MONTHS_LIST[now.month] &&
-    selectedYear === now.year;
+    selectedYear === YEAR &&
+    selectedMonth === MONTHS_LIST[MONTH] &&
+    dayNumber === DAY;
 
   const moodData = MOODS_LIST.find(
     (mood) => mood.scaleValue === currentDayMoodValue
@@ -36,42 +40,52 @@ export const CalendarRowItem: FC<CalendarRowItemProps> = ({
 
   return (
     <Popover>
-      <PopoverTrigger
-        style={{
-          "--bg-color": "transparent",
-        }}
-        className="duration-300 elementColors"
-        disabled={!currentDayMoodValue}
-      >
+      <PopoverTrigger disabled={!currentDayMoodValue}>
         <div
           style={{
             backgroundColor: currentDayMoodValue
-              ? currentColors[currentDayMoodValue + 2]
+              ? currentColors[currentDayMoodValue + 1]
               : "transparent",
-            color: currentDayMoodValue ? currentColors[1] : currentColors[6],
-            borderColor: isToday ? currentColors[10] : "transparent",
+            color:
+              currentDayMoodValue && currentDayMoodValue > 4
+                ? currentColors[0]
+                : currentColors[8],
           }}
           className={`
             flex flex-col items-start justify-center gap-1 sm:gap-2  
-            p-1 sm:p-1
-            rounded-lg border-2 calendarShadow
+            p-1 sm:p-2 rounded-lg elementColors 
+            ${
+              currentDayMoodValue
+                ? "duration-300 hover:-translate-y-1"
+                : "calendarShadow"
+            }
           `}
         >
-          <p className="text-xs sm:text-sm md:text-base font-semibold">
-            {dayNumber}
-          </p>
+          <div
+            style={{
+              backgroundColor: isToday ? currentColors[10] : "transparent",
+            }}
+            className="flex items-center justify-center w-5 h-5 sm:w-7 sm:h-7 rounded-full"
+          >
+            <p
+              style={{
+                color: isToday ? currentColors[0] : "inherit",
+              }}
+              className="text-xs sm:text-sm md:text-base font-semibold"
+            >
+              {dayNumber}
+            </p>
+          </div>
           <div
             style={{
               backgroundColor: currentDayMoodValue
                 ? currentColors[0]
                 : "transparent",
-              border: `1px solid ${
-                currentDayMoodValue
-                  ? currentColors[currentDayMoodValue + 3]
-                  : "transparent"
-              }`,
+              borderColor: currentDayMoodValue
+                ? currentColors[currentDayMoodValue + 3]
+                : "transparent",
             }}
-            className="flex items-center justify-center w-full h-6 shrink-0 rounded-lg py-2 sm:py-4 bg-white"
+            className="flex items-center justify-center w-full h-6 py-2 sm:py-4 rounded-lg border"
           >
             <p>{moodData?.emoji}</p>
           </div>

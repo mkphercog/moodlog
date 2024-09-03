@@ -23,7 +23,7 @@ export const MOODS_LIST: MoodItemType[] = [
   {
     id: "mood_2",
     scaleValue: 2,
-    name: "Sad",
+    name: "Unhappy",
     emoji: "😢",
     animatedEmojiVariant: "cry",
   },

@@ -8,6 +8,7 @@ export const Head = () => {
         crossOrigin="anonymous"
         referrerPolicy="no-referrer"
       />
+      <meta name="google" content="notranslate" />
     </head>
   );
 };

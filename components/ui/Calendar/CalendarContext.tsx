@@ -6,16 +6,13 @@ import {
   createContext,
   PropsWithChildren,
   FC,
+  useEffect,
 } from "react";
 import { DocumentData } from "firebase/firestore";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { MONTHS_LIST } from "@/constants";
-
-const NOW = new Date();
-const currentDay = NOW.getDate();
-const currentMonth = NOW.getMonth();
-const currentYear = NOW.getFullYear();
+import { useCurrentDate } from "@/context/CurrentDateContext";
 
 type CalendarContextType = {
   isLandingPage: boolean;
@@ -28,11 +25,6 @@ type CalendarContextType = {
   displayCurrentDate: string;
   changeMonth: (value: number) => void;
   goToTodayDay: () => void;
-  now: {
-    day: number;
-    month: number;
-    year: number;
-  };
 };
 
 const CalendarContext = createContext<CalendarContextType | undefined>(
@@ -43,11 +35,20 @@ export const CalendarProvider: FC<PropsWithChildren> = ({ children }) => {
   const pathName = usePathname();
   const isLandingPage = pathName === "/";
 
+  const {
+    currentDate: { YEAR, MONTH },
+  } = useCurrentDate();
   const { userMoodsData } = useAuth();
-  const [selectedMonth, setSelectedMonth] = useState(MONTHS_LIST[currentMonth]);
-  const [selectedYear, setSelectedYear] = useState(currentYear);
+  const [selectedMonth, setSelectedMonth] = useState(MONTHS_LIST[MONTH]);
+  const [selectedYear, setSelectedYear] = useState(YEAR);
+
   const numericMonth = MONTHS_LIST.indexOf(selectedMonth);
   const data = userMoodsData?.[selectedYear]?.[numericMonth] || {};
+
+  useEffect(() => {
+    setSelectedMonth(MONTHS_LIST[MONTH]);
+    setSelectedYear(YEAR);
+  }, [MONTH, YEAR]);
 
   const displayedMonth = new Date(
     selectedYear,
@@ -77,8 +78,8 @@ export const CalendarProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   const goToTodayDay = () => {
-    setSelectedYear(currentYear);
-    setSelectedMonth(MONTHS_LIST[currentMonth]);
+    setSelectedYear(YEAR);
+    setSelectedMonth(MONTHS_LIST[MONTH]);
   };
 
   const value = {
@@ -92,11 +93,6 @@ export const CalendarProvider: FC<PropsWithChildren> = ({ children }) => {
     displayCurrentDate: `${selectedMonth}, ${selectedYear}`,
     changeMonth,
     goToTodayDay,
-    now: {
-      day: currentDay,
-      month: currentMonth,
-      year: currentYear,
-    },
   };
 
   return (

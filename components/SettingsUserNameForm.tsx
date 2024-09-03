@@ -1,8 +1,13 @@
 "use client";
 
-import { ChangeEvent, FC } from "react";
+import { ChangeEvent, FC, useEffect } from "react";
 import { Button, Input } from "./ui";
 import { useUiColors } from "@/context/ColorsContext";
+import { getClockNum } from "@/utils";
+import { useTimer } from "react-timer-hook";
+import { useAuth } from "@/context/AuthContext";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "@/firebase";
 
 type SettingsUserNameFormProps = {
   userName: {
@@ -12,7 +17,7 @@ type SettingsUserNameFormProps = {
     clearFields: () => void;
     canSet: boolean;
     submitNew: () => Promise<void>;
-    changeAvailability: string;
+    updateCanSet: (value: boolean) => void;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     error: string | null;
   };
@@ -22,6 +27,39 @@ export const SettingsUserNameForm: FC<SettingsUserNameFormProps> = ({
   userName,
 }) => {
   const { currentColors } = useUiColors();
+  const { currentUser } = useAuth();
+  const { hours, minutes, seconds, restart } = useTimer({
+    expiryTimestamp: new Date(),
+    onExpire: () => userName.updateCanSet(true),
+  });
+
+  const userNameChangeAvailability = !userName.canSet
+    ? `${getClockNum(hours)}:${getClockNum(minutes)}:${getClockNum(seconds)}`
+    : "available";
+
+  useEffect(() => {
+    const getNextDateChange = async () => {
+      if (!currentUser) return;
+      const docRef = doc(db, "users", currentUser.uid);
+      const docSnap = await getDoc(docRef);
+      const settings = docSnap.get("settings");
+
+      if (docSnap.exists() && settings && settings.nextDateChangeUserName) {
+        restart(settings.nextDateChangeUserName, true);
+        userName.updateCanSet(false);
+        return;
+      } else {
+        await setDoc(
+          docRef,
+          { settings: { nextDateChangeUserName: new Date().getTime() } },
+          { merge: true }
+        );
+      }
+    };
+
+    getNextDateChange();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser?.displayName]);
 
   return (
     <form
@@ -33,7 +71,7 @@ export const SettingsUserNameForm: FC<SettingsUserNameFormProps> = ({
         <span
           className={`font-semibold ${userName.canSet ? "text-green-600" : ""}`}
         >
-          {userName.changeAvailability}
+          {userNameChangeAvailability}
         </span>
       </p>
       <div className="w-full relative">

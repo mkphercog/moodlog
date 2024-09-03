@@ -1,4 +1,4 @@
-export const getClockNumbers = (num: number) => (num < 10 ? `0${num}` : num);
+export const getClockNum = (num: number) => (num < 10 ? `0${num}` : num);
 
 export const getRedirectUrl = () => {
   const isDevEnv = !!process && process.env.NODE_ENV === "development";

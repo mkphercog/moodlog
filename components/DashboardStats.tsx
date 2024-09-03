@@ -5,30 +5,28 @@ import { useTimer } from "react-timer-hook";
 import { SECONDARY_FONT, MOODS_LIST } from "@/constants";
 import { DocumentData } from "firebase/firestore";
 import { StatusesType } from "@/types";
-import { getClockNumbers } from "@/utils";
 import { useUiColors } from "@/context/ColorsContext";
-
-const END_OF_DAY = new Date();
-END_OF_DAY.setHours(23, 59, 59, 999);
+import { useCurrentDate } from "@/context/CurrentDateContext";
+import { getClockNum } from "@/utils";
 
 type DashboardStatsProps = {
   data: DocumentData | null;
 };
 
 export const DashboardStats: FC<DashboardStatsProps> = ({ data }) => {
+  const { currentDate, changeCurrentDate } = useCurrentDate();
   const { currentColors } = useUiColors();
   const { seconds, minutes, hours, restart, isRunning } = useTimer({
-    expiryTimestamp: END_OF_DAY,
+    expiryTimestamp: currentDate.END_OF_DAY,
+    onExpire: changeCurrentDate,
   });
 
   useEffect(() => {
     if (!isRunning) {
-      console.info("Time over, restarting...");
-      const now = new Date();
-      now.setHours(23, 59, 59, 999);
-      restart(now, true);
+      restart(currentDate.END_OF_DAY, true);
     }
-  }, [isRunning, restart]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentDate, restart]);
 
   const countValues = () => {
     let totalDaysWithMood = 0;
@@ -53,10 +51,12 @@ export const DashboardStats: FC<DashboardStatsProps> = ({ data }) => {
 
   const statuses: StatusesType = {
     total_days: countValues().numDays,
-    average_mood: `${countValues().averageMood}/${MOODS_LIST.length}`,
-    time_remaining: `${getClockNumbers(hours)}:${getClockNumbers(
-      minutes
-    )}:${getClockNumbers(seconds)}`,
+    average_mood: `
+      ${countValues().averageMood}/${MOODS_LIST.length}
+    `,
+    time_remaining: `
+      ${getClockNum(hours)}:${getClockNum(minutes)}:${getClockNum(seconds)}
+    `,
   };
 
   return (

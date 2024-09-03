@@ -79,7 +79,7 @@
 }
 
 .calendarShadow {
-  box-shadow: 0px 0px 1px 1px lavender, 0px 0px 1px 1px lavender;
+  box-shadow: 1px 0px 1px 1px lavender, 0px 1px 1px 1px lavender;
 }
 
 .purpleShadow {
