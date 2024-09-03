@@ -1,3 +1,5 @@
+"use client";
+
 export const getClockNum = (num: number) => (num < 10 ? `0${num}` : num);
 
 export const getRedirectUrl = () => {

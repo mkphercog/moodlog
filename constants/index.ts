@@ -1,5 +1,8 @@
 import { EmojiVariantType, ErrorMessagesType, MoodItemType } from "@/types";
 import { Nerko_One, Nunito } from "next/font/google";
+import packageJson from "@/package.json";
+
+export const APP_VERSION = packageJson.version;
 
 export const PRIMARY_FONT = Nunito({
   subsets: ["latin"],
