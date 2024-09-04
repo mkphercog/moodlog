@@ -1,7 +1,6 @@
 import { Main } from "@/components/ui";
 import { Dashboard } from "@/components/Dashboard";
 import { Metadata } from "next";
-import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Mood.log() · Dashboard",
@@ -10,9 +9,7 @@ export const metadata: Metadata = {
 const DashboardPage = () => {
   return (
     <Main>
-      <Suspense>
-        <Dashboard />
-      </Suspense>
+      <Dashboard />
     </Main>
   );
 };

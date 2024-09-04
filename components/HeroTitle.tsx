@@ -10,9 +10,13 @@ const getRandomEmojiIndex = () =>
   Math.floor(Math.random() * EMOJI_VARIANT_NAMES_LIST.length);
 
 export const HeroTitle = () => {
-  const [emojiIndex, setEmojiIndex] = useState(getRandomEmojiIndex());
+  const [emojiIndex, setEmojiIndex] = useState(0);
   const { currentUser } = useAuth();
   const { currentColors } = useUiColors();
+
+  useEffect(() => {
+    setEmojiIndex(getRandomEmojiIndex());
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {

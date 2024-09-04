@@ -1,6 +1,6 @@
 "use client";
 
-import { SECONDARY_FONT } from "@/constants";
+import { APP_VERSION, SECONDARY_FONT } from "@/constants";
 import { useUiColors } from "@/context/ColorsContext";
 import Link from "next/link";
 
@@ -8,7 +8,7 @@ export const Footer = () => {
   const { currentColors } = useUiColors();
 
   return (
-    <footer className="p-4 sm:p-8 grid place-items-center">
+    <footer className="grid place-items-center p-4 sm:p-8">
       <p
         style={{ color: currentColors[5] }}
         className={`${SECONDARY_FONT.className}`}
@@ -24,9 +24,12 @@ export const Footer = () => {
           target="_blank"
         >
           Marcin Hercog
-        </Link>{" "}
-        ❤️‍🔥
+        </Link>
       </p>
+      <p
+        style={{ color: currentColors[5] }}
+        className="text-xs"
+      >{`version ${APP_VERSION}`}</p>
     </footer>
   );
 };
