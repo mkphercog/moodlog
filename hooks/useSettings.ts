@@ -1,66 +1,45 @@
 "use client";
 
-import { useToast } from "@/components/ui/use-toast";
-import { ERROR_MESSAGES, USER_NAME_MAX_LENGTH } from "@/constants";
-import { useAuth } from "@/context/AuthContext";
-import { db } from "@/firebase";
-import {
-  EmailAuthProvider,
-  deleteUser,
-  reauthenticateWithCredential,
-} from "firebase/auth";
-import { deleteDoc, doc, setDoc } from "firebase/firestore";
-import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/firebase";
+import { deleteUserWithData } from "@/actions/deleteUserWithData";
+import { useToast } from "@/components/ui/use-toast";
+import { USER_NAME_MAX_LENGTH } from "@/constants";
+import { useAuth } from "@/context/AuthContext";
+
+export type DeletingStatusType = "unset" | "processing";
 
 export const useSettings = () => {
   const { toast } = useToast();
-  const router = useRouter();
   const { currentUser, updateUserName, logOut } = useAuth();
   const [canSetUserName, setCanSetUserName] = useState(false);
+  const [deletingStatus, setDeletingStatus] =
+    useState<DeletingStatusType>("unset");
   const [userName, setUserName] = useState("");
   const [userNameError, setUserNameError] = useState<string | null>(null);
-  const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState<string | null>("");
 
   const handleSubmitDelete = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!currentUser || !currentUser.email) return;
+    setDeletingStatus("processing");
 
-    if (!password.length) {
-      setPasswordError(ERROR_MESSAGES["empty"]);
-      return;
-    }
+    const deletingStatus = await deleteUserWithData(currentUser.uid);
 
-    try {
-      const credential = EmailAuthProvider.credential(
-        currentUser.email,
-        password
-      );
-      await reauthenticateWithCredential(currentUser, credential)
-        .then(async ({ user }) => {
-          const docRef = doc(db, "users", currentUser.uid);
-          await deleteDoc(docRef);
-          await deleteUser(user);
-          await logOut(false);
-
-          toast({
-            title: "It's hard to say that... 🥲",
-            description:
-              "Your account and all data has been successfully deleted. Have a nice day!",
-          });
-        })
-        .catch(() => {
-          setPasswordError(ERROR_MESSAGES["incorrect"]);
-        });
-
-      router.replace("/dashboard?mode=register");
-    } catch (error) {
+    if (deletingStatus) {
+      logOut();
+      toast({
+        title: "It's hard to say that... 🥲",
+        description:
+          "Your account and all data has been successfully deleted. Have a nice day!",
+      });
+    } else {
       toast({
         title: "Opss...",
         description:
           "Isn't a sign? 😊 Something went wrong while deleting account.",
       });
+      setDeletingStatus("unset");
     }
   };
 
@@ -107,19 +86,10 @@ export const useSettings = () => {
     setUserNameError(null);
   };
 
-  const clearPasswordFields = () => {
-    setPassword("");
-    setPasswordError(null);
-  };
-
-  const passwordOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    setPasswordError(null);
-  };
-
   return {
     logOut,
     handleSubmitDelete,
+    deletingStatus,
     userName: {
       value: userName,
       valueInDB: currentUser?.displayName,
@@ -130,12 +100,6 @@ export const useSettings = () => {
       submitNew: handleSubmitNewUserName,
       onChange: userNameOnChange,
       error: userNameError,
-    },
-    password: {
-      value: password,
-      error: passwordError,
-      clearFields: clearPasswordFields,
-      onChange: passwordOnChange,
     },
   };
 };

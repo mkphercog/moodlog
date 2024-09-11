@@ -95,7 +95,7 @@ export const Login = () => {
           >
             {authenticating ? (
               <div className="flex gap-2">
-                <Loading className="text-white" size="sm" />
+                <Loading size="sm" />
                 Submitting
               </div>
             ) : (

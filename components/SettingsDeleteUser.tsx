@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FC, FormEvent } from "react";
+import { FC, FormEvent } from "react";
 import {
   Dialog,
   DialogContent,
@@ -14,39 +14,39 @@ import {
   AnimatedEmoji,
   BASIC_BUTTON_CLASS_NAMES,
   Button,
-  InputPassword,
+  Loading,
   getButtonColors,
 } from "./ui";
 import { useUiColors } from "@/context/ColorsContext";
+import { DeletingStatusType } from "@/hooks/useSettings";
 
 type SettingsDeleteUserProps = {
-  password: {
-    value: string;
-    error: string | null;
-    clearFields: () => void;
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  };
   handleSubmitDelete: (e: FormEvent<HTMLFormElement>) => Promise<void>;
+  deletingStatus: DeletingStatusType;
 };
 
 export const SettingsDeleteUser: FC<SettingsDeleteUserProps> = ({
-  password,
   handleSubmitDelete,
+  deletingStatus,
 }) => {
   const { currentColorName } = useUiColors();
+  const isProcessing = deletingStatus === "processing";
 
   return (
-    <Dialog onOpenChange={password.clearFields}>
+    <Dialog>
       <DialogTrigger
         className={`
-          ${BASIC_BUTTON_CLASS_NAMES}
-          mt-10 self-end font-semibold border-none
-          duration-300 text-red-500 hover:text-red-400 
-        `}
+            ${BASIC_BUTTON_CLASS_NAMES}
+            mt-10 self-end font-semibold border-none
+            duration-300 text-red-500 hover:text-red-400 
+            `}
       >
         Delete account
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent
+        disableClose={isProcessing}
+        onInteractOutside={(e) => isProcessing && e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>Are you absolutely sure?</DialogTitle>
           <DialogDescription>
@@ -59,21 +59,12 @@ export const SettingsDeleteUser: FC<SettingsDeleteUserProps> = ({
             className="w-full flex flex-col gap-4"
             onSubmit={handleSubmitDelete}
           >
-            <InputPassword
-              value={password.value}
-              onChange={password.onChange}
-              isError={!!password.error}
-            />
-            {password.error && (
-              <p className="text-xs sm:text-sm text-red-600 font-bold">
-                {password.error}
-              </p>
-            )}
             <div className="flex items-center justify-between gap-2">
               <DialogClose
                 style={getButtonColors(currentColorName, "outline")}
                 className={`${BASIC_BUTTON_CLASS_NAMES} elementColors`}
                 type="button"
+                disabled={isProcessing}
               >
                 Cancel
               </DialogClose>
@@ -82,7 +73,16 @@ export const SettingsDeleteUser: FC<SettingsDeleteUserProps> = ({
                 emojiVariant="pleading"
                 className="w-16 h-16"
               />
-              <Button variant="destructive">Delete</Button>
+              <Button variant="destructive" disabled={isProcessing}>
+                {isProcessing ? (
+                  <div className="flex gap-2">
+                    <Loading size="sm" />
+                    Deleting
+                  </div>
+                ) : (
+                  "Delete"
+                )}
+              </Button>
             </div>
           </form>
         </div>

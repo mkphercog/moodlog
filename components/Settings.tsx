@@ -18,7 +18,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { memo, useMemo } from "react";
 
 export const SettingsComponent = () => {
-  const { userName, password, logOut, handleSubmitDelete } = useSettings();
+  const { userName, logOut, handleSubmitDelete, deletingStatus } =
+    useSettings();
   const searchParams = useSearchParams();
   const router = useRouter();
   const { currentColors, resetColor } = useUiColors();
@@ -65,8 +66,8 @@ export const SettingsComponent = () => {
           <SettingsUserNameForm userName={userName} />
           <SettingsUiColors />
           <SettingsDeleteUser
-            password={password}
             handleSubmitDelete={handleSubmitDelete}
+            deletingStatus={deletingStatus}
           />
         </div>
       </SheetContent>

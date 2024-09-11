@@ -56,7 +56,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
           toast({
             title: "Check your mail! 📧",
             description:
-              "We have sent you a verification email, click the link and log in to the app.",
+              "We have sent you a verification email, click the link and log in to the app. If you don't see the email, make sure to check your spam folder.",
           });
           await logOut();
         })
