@@ -8,7 +8,6 @@ import {
   PropsWithChildren,
   FC,
 } from "react";
-import { doc, getDoc } from "firebase/firestore";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
@@ -23,7 +22,7 @@ import { useRouter } from "next/navigation";
 import { getRedirectUrl } from "@/utils";
 import { AuthContextType } from "./AuthContext.type";
 import { useToast } from "@/components/ui/use-toast";
-import { initNewUserDbData } from "@/actions";
+import { getUserDbData, initNewUserDbData } from "@/actions";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -151,13 +150,8 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         }
 
         setCurrentUser(user);
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          const { moods } = docSnap.data();
-          setUserMoodsData(moods);
-        }
+        const { moods } = await getUserDbData(user.uid);
+        setUserMoodsData(moods);
       } catch (error) {
         console.error("User data not found, ", error);
       } finally {

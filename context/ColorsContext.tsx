@@ -9,11 +9,9 @@ import {
   useEffect,
 } from "react";
 import { COLORS } from "@/constants";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/firebase";
 import { useAuth } from "./AuthContext";
 import { ColorNameType } from "@/types";
-import { setUserDbSettings } from "@/actions";
+import { getUserDbData, setUserDbSettings } from "@/actions";
 
 type UiColorsContextType = {
   currentColorName: ColorNameType;
@@ -39,15 +37,10 @@ export const UiColorsProvider: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     const getUserUiColor = async () => {
       if (!currentUser) return;
-
-      const docRef = doc(db, "users", currentUser.uid);
-      const docSnap = await getDoc(docRef);
-
-      const settings = docSnap.get("settings");
-
-      if (docSnap.exists()) {
-        setCurrentColor(settings.uiColor);
-      }
+      const {
+        settings: { uiColor },
+      } = await getUserDbData(currentUser.uid);
+      setCurrentColor(uiColor);
     };
 
     getUserUiColor();

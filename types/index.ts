@@ -52,3 +52,21 @@ export type ColorNameType =
   | "yellow"
   | "fuchsia"
   | "pink";
+
+export type UserDbDayType = {
+  scaleValue: number;
+};
+
+export type UserDbDataType = {
+  settings: {
+    nextDateChangeUserName: number;
+    uiColor: ColorNameType;
+  };
+  moods: {
+    [year: string]: {
+      [month: string]: {
+        [day: string]: UserDbDayType;
+      };
+    };
+  };
+};

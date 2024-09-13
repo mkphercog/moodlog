@@ -3,14 +3,13 @@
 import { FC, useEffect } from "react";
 import { useTimer } from "react-timer-hook";
 import { SECONDARY_FONT, MOODS_LIST } from "@/constants";
-import { DocumentData } from "firebase/firestore";
-import { StatusesType } from "@/types";
+import { StatusesType, UserDbDataType } from "@/types";
 import { useUiColors } from "@/context/ColorsContext";
 import { useCurrentDate } from "@/context/CurrentDateContext";
 import { getClockNum } from "@/utils";
 
 type DashboardStatsProps = {
-  data: DocumentData | null;
+  data: UserDbDataType["moods"] | null;
 };
 
 export const DashboardStats: FC<DashboardStatsProps> = ({ data }) => {

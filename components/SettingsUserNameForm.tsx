@@ -6,8 +6,7 @@ import { useUiColors } from "@/context/ColorsContext";
 import { getClockNum } from "@/utils";
 import { useTimer } from "react-timer-hook";
 import { useAuth } from "@/context/AuthContext";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/firebase";
+import { getUserDbData } from "@/actions";
 
 type SettingsUserNameFormProps = {
   userName: {
@@ -40,15 +39,12 @@ export const SettingsUserNameForm: FC<SettingsUserNameFormProps> = ({
   useEffect(() => {
     const getNextDateChange = async () => {
       if (!currentUser) return;
-      const docRef = doc(db, "users", currentUser.uid);
-      const docSnap = await getDoc(docRef);
-      const settings = docSnap.get("settings");
+      const {
+        settings: { nextDateChangeUserName },
+      } = await getUserDbData(currentUser.uid);
 
-      if (docSnap.exists()) {
-        restart(settings.nextDateChangeUserName, true);
-        userName.updateCanSet(false);
-        return;
-      }
+      restart(new Date(nextDateChangeUserName), true);
+      userName.updateCanSet(false);
     };
 
     getNextDateChange();

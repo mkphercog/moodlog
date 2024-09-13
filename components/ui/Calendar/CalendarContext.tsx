@@ -8,15 +8,15 @@ import {
   FC,
   useEffect,
 } from "react";
-import { DocumentData } from "firebase/firestore";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useCurrentDate } from "@/context/CurrentDateContext";
 import { getMonthById } from "@/utils";
+import { UserDbDayType } from "@/types";
 
 type CalendarContextType = {
   isLandingPage: boolean;
-  userMoodsData: DocumentData;
+  userMoodsData: { [day: string]: UserDbDayType };
   rowsNum: number;
   daysInMonth: number;
   firstDayOfMonth: number;
