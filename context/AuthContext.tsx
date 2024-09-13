@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { getRedirectUrl } from "@/utils";
 import { AuthContextType } from "./AuthContext.type";
 import { useToast } from "@/components/ui/use-toast";
+import { initNewUserData } from "@/actions/initNewUserData";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -47,10 +48,14 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         password
       );
 
+      await initNewUserData(
+        registerResponse.user.uid,
+        "indigo",
+        new Date().getTime()
+      );
+
       sendEmailVerification(registerResponse.user, {
-        url: `${getRedirectUrl()}/dashboard?mode=login&email=${
-          registerResponse.user.email
-        }`,
+        url: `${getRedirectUrl()}/dashboard?mode=login&email=${email}`,
       })
         .then(async () => {
           toast({

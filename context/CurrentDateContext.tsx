@@ -13,7 +13,7 @@ NOW.setHours(23, 59, 59, 999);
 
 const INITIAL_DATE = {
   DAY: NOW.getDate(),
-  MONTH: NOW.getMonth(),
+  MONTH: NOW.getMonth() + 1,
   YEAR: NOW.getFullYear(),
   END_OF_DAY: NOW,
 };
@@ -41,7 +41,7 @@ export const CurrentDateProvider: FC<PropsWithChildren> = ({ children }) => {
 
     setCurrentDate({
       DAY: now.getDate(),
-      MONTH: now.getMonth(),
+      MONTH: now.getMonth() + 1,
       YEAR: now.getFullYear(),
       END_OF_DAY: now,
     });

@@ -40,3 +40,15 @@ export type MoodItemType = {
   emoji: string;
   animatedEmojiVariant: EmojiVariantType;
 };
+
+export type ColorNameType =
+  | "indigo"
+  | "blue"
+  | "sky"
+  | "emerald"
+  | "green"
+  | "lime"
+  | "amber"
+  | "yellow"
+  | "fuchsia"
+  | "pink";

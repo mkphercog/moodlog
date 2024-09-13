@@ -2,6 +2,7 @@
 
 import { COLORS } from "@/constants";
 import { useUiColors } from "@/context/ColorsContext";
+import { ColorNameType } from "@/types";
 
 export const SettingsUiColors = () => {
   const { currentColorName, setNewColor } = useUiColors();
@@ -12,7 +13,8 @@ export const SettingsUiColors = () => {
         Choose your interface color:
       </p>
       <div className="grid grid-cols-5 md:grid-cols-10 gap-4 w-full md:w-auto justify-between md:justify-center">
-        {Object.keys(COLORS).map((color) => {
+        {Object.keys(COLORS).map((key) => {
+          const color = key as ColorNameType;
           const isCurrentColor = color === currentColorName;
           return (
             <div className="flex flex-col items-center gap-3" key={color}>

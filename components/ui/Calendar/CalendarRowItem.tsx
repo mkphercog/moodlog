@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { DAY_LIST, MONTHS_LIST, MOODS_LIST } from "@/constants";
+import { DAY_LIST, MOODS_LIST } from "@/constants";
 import {
   Popover,
   PopoverContent,
@@ -11,6 +11,7 @@ import { useCalendar } from "./CalendarContext";
 import { useUiColors } from "@/context/ColorsContext";
 import { MoodItemType } from "@/types";
 import { useCurrentDate } from "@/context/CurrentDateContext";
+import { getMonthById } from "@/utils";
 
 type CalendarRowItemProps = {
   dayNumber: number;
@@ -31,7 +32,7 @@ export const CalendarRowItem: FC<CalendarRowItemProps> = ({
 
   const isToday =
     selectedYear === YEAR &&
-    selectedMonth === MONTHS_LIST[MONTH] &&
+    selectedMonth.id === getMonthById(MONTH).id &&
     dayNumber === DAY;
 
   const moodData = MOODS_LIST.find(
@@ -47,7 +48,7 @@ export const CalendarRowItem: FC<CalendarRowItemProps> = ({
               ? currentColors[currentDayMoodValue + 1]
               : "transparent",
             color:
-              currentDayMoodValue && currentDayMoodValue > 4
+              currentDayMoodValue && currentDayMoodValue > 3
                 ? currentColors[0]
                 : currentColors[8],
           }}

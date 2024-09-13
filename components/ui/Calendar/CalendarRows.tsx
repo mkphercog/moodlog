@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarRowItem } from "./CalendarRowItem";
-import { DAY_LIST, LANDING_PAGE_MOODS, MONTHS_LIST } from "@/constants";
+import { DAY_LIST, LANDING_PAGE_MOODS } from "@/constants";
 import { useCalendar } from "./CalendarContext";
 import { useCurrentDate } from "@/context/CurrentDateContext";
 
@@ -36,16 +36,13 @@ export const CalendarRows = () => {
               }
 
               let currentDayMoodValue: number | undefined;
-              const selectedMonthIndex = MONTHS_LIST.findIndex(
-                (month) => month === selectedMonth
-              );
 
               const selectedYearIsLower = selectedYear < YEAR;
               const currentYearAndSelectedMonthIsLower =
-                selectedYear === YEAR && selectedMonthIndex < MONTH;
+                selectedYear === YEAR && selectedMonth.id < MONTH;
               const currentYearAndMonthDaysAreLower =
                 selectedYear === YEAR &&
-                selectedMonthIndex === MONTH &&
+                selectedMonth.id === MONTH &&
                 dayNumber <= DAY;
 
               if (isLandingPage) {

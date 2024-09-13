@@ -44,16 +44,10 @@ export const SettingsUserNameForm: FC<SettingsUserNameFormProps> = ({
       const docSnap = await getDoc(docRef);
       const settings = docSnap.get("settings");
 
-      if (docSnap.exists() && settings && settings.nextDateChangeUserName) {
+      if (docSnap.exists()) {
         restart(settings.nextDateChangeUserName, true);
         userName.updateCanSet(false);
         return;
-      } else {
-        await setDoc(
-          docRef,
-          { settings: { nextDateChangeUserName: new Date().getTime() } },
-          { merge: true }
-        );
       }
     };
 

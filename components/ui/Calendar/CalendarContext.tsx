@@ -11,8 +11,8 @@ import {
 import { DocumentData } from "firebase/firestore";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { MONTHS_LIST } from "@/constants";
 import { useCurrentDate } from "@/context/CurrentDateContext";
+import { getMonthById } from "@/utils";
 
 type CalendarContextType = {
   isLandingPage: boolean;
@@ -20,7 +20,7 @@ type CalendarContextType = {
   rowsNum: number;
   daysInMonth: number;
   firstDayOfMonth: number;
-  selectedMonth: string;
+  selectedMonth: { id: number; name: string };
   selectedYear: number;
   displayCurrentDate: string;
   changeMonth: (value: number) => void;
@@ -39,47 +39,37 @@ export const CalendarProvider: FC<PropsWithChildren> = ({ children }) => {
     currentDate: { YEAR, MONTH },
   } = useCurrentDate();
   const { userMoodsData } = useAuth();
-  const [selectedMonth, setSelectedMonth] = useState(MONTHS_LIST[MONTH]);
+  const [selectedMonth, setSelectedMonth] = useState(getMonthById(MONTH));
   const [selectedYear, setSelectedYear] = useState(YEAR);
 
-  const numericMonth = MONTHS_LIST.indexOf(selectedMonth);
-  const data = userMoodsData?.[selectedYear]?.[numericMonth] || {};
+  const data = userMoodsData?.[selectedYear]?.[selectedMonth.id] || {};
 
   useEffect(() => {
-    setSelectedMonth(MONTHS_LIST[MONTH]);
+    setSelectedMonth(getMonthById(MONTH));
     setSelectedYear(YEAR);
   }, [MONTH, YEAR]);
 
-  const displayedMonth = new Date(
-    selectedYear,
-    MONTHS_LIST.indexOf(selectedMonth),
-    0
-  );
+  const displayedMonth = new Date(selectedYear, selectedMonth.id - 1, 0);
   const firstDayOfMonth = displayedMonth.getDay();
-  const daysInMonth = new Date(
-    selectedYear,
-    MONTHS_LIST.indexOf(selectedMonth) + 1,
-    0
-  ).getDate();
-
+  const daysInMonth = new Date(selectedYear, selectedMonth.id, 0).getDate();
   const daysToDisplay = firstDayOfMonth + daysInMonth;
   const rowsNum = Math.floor(daysToDisplay / 7) + (daysToDisplay % 7 ? 1 : 0);
 
   const changeMonth = (value: number) => {
-    if (numericMonth + value < 0) {
+    if (selectedMonth.id + value < 1) {
       setSelectedYear((state) => state - 1);
-      setSelectedMonth(MONTHS_LIST[11]);
-    } else if (numericMonth + value > 11) {
+      setSelectedMonth(getMonthById(12));
+    } else if (selectedMonth.id + value > 12) {
       setSelectedYear((state) => state + 1);
-      setSelectedMonth(MONTHS_LIST[0]);
+      setSelectedMonth(getMonthById(1));
     } else {
-      setSelectedMonth(MONTHS_LIST[numericMonth + value]);
+      setSelectedMonth(getMonthById(selectedMonth.id + value));
     }
   };
 
   const goToTodayDay = () => {
     setSelectedYear(YEAR);
-    setSelectedMonth(MONTHS_LIST[MONTH]);
+    setSelectedMonth(getMonthById(MONTH));
   };
 
   const value = {
@@ -90,7 +80,7 @@ export const CalendarProvider: FC<PropsWithChildren> = ({ children }) => {
     daysInMonth,
     selectedMonth,
     selectedYear,
-    displayCurrentDate: `${selectedMonth}, ${selectedYear}`,
+    displayCurrentDate: `${selectedMonth.name}, ${selectedYear}`,
     changeMonth,
     goToTodayDay,
   };

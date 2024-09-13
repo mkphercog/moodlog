@@ -12,11 +12,12 @@ import { COLORS } from "@/constants";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/firebase";
 import { useAuth } from "./AuthContext";
+import { ColorNameType } from "@/types";
 
 type UiColorsContextType = {
-  currentColorName: string;
+  currentColorName: ColorNameType;
   currentColors: string[];
-  setNewColor: (newColor: string) => void;
+  setNewColor: (newColor: ColorNameType) => void;
   resetColor: () => void;
 };
 
@@ -25,10 +26,10 @@ const UiColorsContext = createContext<UiColorsContextType | undefined>(
 );
 
 export const UiColorsProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [currentColor, setCurrentColor] = useState("green");
+  const [currentColor, setCurrentColor] = useState<ColorNameType>("green");
   const { currentUser } = useAuth();
 
-  const setNewColor = async (newColor: string) => {
+  const setNewColor = async (newColor: ColorNameType) => {
     if (!currentUser || newColor === currentColor) return;
     setCurrentColor(newColor);
 
@@ -45,14 +46,8 @@ export const UiColorsProvider: FC<PropsWithChildren> = ({ children }) => {
 
       const settings = docSnap.get("settings");
 
-      if (docSnap.exists() && settings && settings.uiColor) {
+      if (docSnap.exists()) {
         setCurrentColor(settings.uiColor);
-      } else {
-        await setDoc(
-          docRef,
-          { settings: { uiColor: "green" } },
-          { merge: true }
-        );
       }
     };
 
