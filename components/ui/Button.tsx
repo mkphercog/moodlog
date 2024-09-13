@@ -2,6 +2,7 @@
 
 import { COLORS } from "@/constants";
 import { useUiColors } from "@/context/ColorsContext";
+import { ColorNameType } from "@/types";
 import { ButtonHTMLAttributes, FC, PropsWithChildren } from "react";
 
 export const BASIC_BUTTON_CLASS_NAMES = `
@@ -12,7 +13,10 @@ border border-solid
 disabled:border-slate-600 disabled:bg-slate-100 disabled:text-slate-600 disabled:cursor-not-allowed
 `;
 
-export const getButtonColors = (colorName: string, variant: Variants) => {
+export const getButtonColors = (
+  colorName: ColorNameType,
+  variant: Variants
+) => {
   const colorStyles: Record<Variants, {}> = {
     light: {
       "--text-color": COLORS[colorName][6],
