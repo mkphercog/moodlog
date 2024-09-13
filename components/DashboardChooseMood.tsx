@@ -7,7 +7,7 @@ import { useUiColors } from "@/context/ColorsContext";
 import { useAuth } from "@/context/AuthContext";
 import { useSearchParams } from "next/navigation";
 import { useCurrentDate } from "@/context/CurrentDateContext";
-import { setUserMood } from "@/actions";
+import { setUserDbMood } from "@/actions";
 
 const DashboardChooseMoodComponent = () => {
   const { currentUser, userMoodsData, setUserMoodsData } = useAuth();
@@ -36,7 +36,7 @@ const DashboardChooseMoodComponent = () => {
     if (!currentUser) return;
 
     try {
-      const response = await setUserMood({
+      const response = await setUserDbMood({
         userId: currentUser.uid,
         year: YEAR,
         month: MONTH,

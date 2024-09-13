@@ -1,9 +1,7 @@
 "use client";
 
 import { ChangeEvent, FormEvent, useState } from "react";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "@/firebase";
-import { deleteUserWithData } from "@/actions";
+import { deleteUserWithDbData, setUserDbSettings } from "@/actions";
 import { useToast } from "@/components/ui/use-toast";
 import { USER_NAME_MAX_LENGTH } from "@/constants";
 import { useAuth } from "@/context/AuthContext";
@@ -24,7 +22,7 @@ export const useSettings = () => {
     if (!currentUser || !currentUser.email) return;
     setDeletingStatus("processing");
 
-    const deletingStatus = await deleteUserWithData(currentUser.uid);
+    const deletingStatus = await deleteUserWithDbData(currentUser.uid);
 
     if (deletingStatus) {
       logOut();
@@ -64,12 +62,10 @@ export const useSettings = () => {
     setUserName("");
     const now = new Date();
     now.setHours(now.getHours() + 1);
-    const docRef = doc(db, "users", currentUser.uid);
-    await setDoc(
-      docRef,
-      { settings: { nextDateChangeUserName: now.getTime() } },
-      { merge: true }
-    );
+    setUserDbSettings({
+      userId: currentUser.uid,
+      nextDateChangeUserName: now.getTime(),
+    });
   };
 
   const clearUserNameFields = () => {

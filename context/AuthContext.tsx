@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 import { getRedirectUrl } from "@/utils";
 import { AuthContextType } from "./AuthContext.type";
 import { useToast } from "@/components/ui/use-toast";
-import { initNewUserData } from "@/actions";
+import { initNewUserDbData } from "@/actions";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -48,7 +48,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         password
       );
 
-      await initNewUserData(
+      await initNewUserDbData(
         registerResponse.user.uid,
         "indigo",
         new Date().getTime()

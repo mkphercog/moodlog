@@ -2,7 +2,7 @@
 
 import { adminDb } from "@/firebaseAdmin";
 
-type SetUserMoodProps = {
+type SetUserDbMoodProps = {
   userId: string;
   year: number;
   month: number;
@@ -12,13 +12,13 @@ type SetUserMoodProps = {
   };
 };
 
-export const setUserMood = async ({
+export const setUserDbMood = async ({
   userId,
   year,
   month,
   day,
   mood,
-}: SetUserMoodProps) => {
+}: SetUserDbMoodProps) => {
   await adminDb
     .collection("users")
     .doc(userId)

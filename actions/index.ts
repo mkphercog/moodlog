@@ -1,3 +1,4 @@
-export * from "./deleteUserWithData";
-export * from "./initNewUserData";
-export * from "./setUserMood";
+export * from "./deleteUserWithDbData";
+export * from "./initNewUserDbData";
+export * from "./setUserDbMood";
+export * from "./setUserDbSettings";

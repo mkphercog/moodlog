@@ -3,25 +3,24 @@
 import { ColorNameType } from "@/types";
 import { adminDb } from "@/firebaseAdmin";
 
-export const initNewUserData = async (
+export const initNewUserDbData = async (
   userId: string,
   uiColor: ColorNameType,
   currentDateInMs: number
 ) => {
-  console.info(`>>>>> Create initial settings for user (${userId}) <<<<<`);
   await adminDb
     .collection("users")
     .doc(userId)
-    .set({
-      settings: {
-        nextDateChangeUserName: currentDateInMs,
-        uiColor,
+    .set(
+      {
+        settings: {
+          nextDateChangeUserName: currentDateInMs,
+          uiColor,
+        },
       },
-    });
+      { merge: true }
+    );
 
-  console.info(
-    `>>>>> Create initial object 'moods' for user (${userId}) <<<<<`
-  );
   await adminDb
     .collection("users")
     .doc(userId)

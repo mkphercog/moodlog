@@ -9,10 +9,11 @@ import {
   useEffect,
 } from "react";
 import { COLORS } from "@/constants";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase";
 import { useAuth } from "./AuthContext";
 import { ColorNameType } from "@/types";
+import { setUserDbSettings } from "@/actions";
 
 type UiColorsContextType = {
   currentColorName: ColorNameType;
@@ -32,9 +33,7 @@ export const UiColorsProvider: FC<PropsWithChildren> = ({ children }) => {
   const setNewColor = async (newColor: ColorNameType) => {
     if (!currentUser || newColor === currentColor) return;
     setCurrentColor(newColor);
-
-    const docRef = doc(db, "users", currentUser?.uid || "");
-    await setDoc(docRef, { settings: { uiColor: newColor } }, { merge: true });
+    setUserDbSettings({ userId: currentUser.uid, uiColor: newColor });
   };
 
   useEffect(() => {
