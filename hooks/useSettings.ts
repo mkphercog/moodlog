@@ -3,7 +3,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/firebase";
-import { deleteUserWithData } from "@/actions/deleteUserWithData";
+import { deleteUserWithData } from "@/actions";
 import { useToast } from "@/components/ui/use-toast";
 import { USER_NAME_MAX_LENGTH } from "@/constants";
 import { useAuth } from "@/context/AuthContext";

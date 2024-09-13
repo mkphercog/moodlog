@@ -56,7 +56,7 @@ export const CalendarRows = () => {
                   currentDayMoodValue = undefined;
                 }
               } else if (dayNumber in userMoodsData) {
-                currentDayMoodValue = userMoodsData[dayNumber];
+                currentDayMoodValue = userMoodsData[dayNumber].scaleValue;
               } else {
                 currentDayMoodValue = undefined;
               }

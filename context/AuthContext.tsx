@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 import { getRedirectUrl } from "@/utils";
 import { AuthContextType } from "./AuthContext.type";
 import { useToast } from "@/components/ui/use-toast";
-import { initNewUserData } from "@/actions/initNewUserData";
+import { initNewUserData } from "@/actions";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

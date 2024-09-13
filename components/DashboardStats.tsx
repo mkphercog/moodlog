@@ -35,7 +35,7 @@ export const DashboardStats: FC<DashboardStatsProps> = ({ data }) => {
     for (let year in data) {
       for (let month in data[year]) {
         for (let day in data[year][month]) {
-          let dayMood = data[year][month][day];
+          let dayMood = data[year][month][day].scaleValue;
           totalDaysWithMood++;
           moodsSum += dayMood;
         }

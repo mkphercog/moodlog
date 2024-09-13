@@ -1,14 +1,13 @@
 "use client";
 
 import { memo, useEffect, useMemo, useState } from "react";
-import { DocumentData, doc, setDoc } from "firebase/firestore";
-import { db } from "@/firebase";
 import { AnimatedEmoji, Button } from "./ui";
 import { MOODS_LIST, SECONDARY_FONT } from "@/constants";
 import { useUiColors } from "@/context/ColorsContext";
 import { useAuth } from "@/context/AuthContext";
 import { useSearchParams } from "next/navigation";
 import { useCurrentDate } from "@/context/CurrentDateContext";
+import { setUserMood } from "@/actions";
 
 const DashboardChooseMoodComponent = () => {
   const { currentUser, userMoodsData, setUserMoodsData } = useAuth();
@@ -34,26 +33,20 @@ const DashboardChooseMoodComponent = () => {
   }, []);
 
   const handleSetMood = async (mood: number) => {
-    try {
-      const newData: DocumentData = { ...userMoodsData };
-      if (!newData?.[YEAR]) {
-        newData[YEAR] = {};
-      }
-      if (!newData?.[YEAR]?.[MONTH]) {
-        newData[YEAR][MONTH] = {};
-      }
-      if (userMoodsData?.[YEAR]?.[MONTH]?.[DAY] === mood) {
-        return;
-      }
-      newData[YEAR][MONTH][DAY] = mood;
+    if (!currentUser) return;
 
-      setUserMoodsData(newData);
-      const docRef = doc(db, "users", currentUser?.uid || "");
-      await setDoc(
-        docRef,
-        { moods: { [YEAR]: { [MONTH]: { [DAY]: mood } } } },
-        { merge: true }
-      );
+    try {
+      const response = await setUserMood({
+        userId: currentUser.uid,
+        year: YEAR,
+        month: MONTH,
+        day: DAY,
+        mood: {
+          scaleValue: mood,
+        },
+      });
+
+      setUserMoodsData(response);
     } catch (error) {
       console.error("Failed to set data: ", error);
     }
@@ -83,7 +76,8 @@ const DashboardChooseMoodComponent = () => {
       </h4>
       <div className="grid grid-cols-2 md:grid-cols-8 lg:grid-cols-7 gap-4">
         {MOODS_LIST.map((mood) => {
-          const selectedUserMood = userMoodsData?.[YEAR]?.[MONTH]?.[DAY];
+          const selectedUserMood =
+            userMoodsData?.[YEAR]?.[MONTH]?.[DAY].scaleValue;
 
           return (
             <Button
