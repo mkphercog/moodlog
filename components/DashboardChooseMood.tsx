@@ -77,7 +77,7 @@ const DashboardChooseMoodComponent = () => {
       <div className="grid grid-cols-2 md:grid-cols-8 lg:grid-cols-7 gap-4">
         {MOODS_LIST.map((mood) => {
           const selectedUserMood =
-            userMoodsData?.[YEAR]?.[MONTH]?.[DAY].scaleValue;
+            userMoodsData?.[YEAR]?.[MONTH]?.[DAY]?.scaleValue || -1;
 
           return (
             <Button

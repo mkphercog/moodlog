@@ -11,7 +11,11 @@ export default function NotFound() {
         >
           Where is your mood?
         </h2>
-        <AnimatedEmoji canAnimate emojiVariant="monocle" />
+        <AnimatedEmoji
+          canAnimate
+          emojiVariant="monocle"
+          className="!w-32 !h-32 sm:!w-44 sm:!h-44"
+        />
         <Link href="/">
           <Button variant="dark">Check on the Home page</Button>
         </Link>

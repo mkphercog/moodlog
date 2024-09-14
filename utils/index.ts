@@ -1,6 +1,6 @@
 "use client";
 
-import { MONTHS } from "@/constants";
+import { EMOJI_VARIANT_NAMES_LIST, MONTHS } from "@/constants";
 
 export const getClockNum = (num: number) => (num < 10 ? `0${num}` : num);
 
@@ -16,4 +16,8 @@ export const getRedirectUrl = () => {
 
 export const getMonthById = (id: number) => {
   return MONTHS.find((month) => month.id === id) || MONTHS[0];
+};
+
+export const getRandomEmojiIndex = () => {
+  return Math.floor(Math.random() * EMOJI_VARIANT_NAMES_LIST.length);
 };

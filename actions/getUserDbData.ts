@@ -1,5 +1,6 @@
 "use server";
 
+import { INITIAL_USER_MOODS_DATA } from "@/constants";
 import { adminDb } from "@/firebaseAdmin";
 import { UserDbDataType } from "@/types";
 
@@ -13,7 +14,7 @@ export const getUserDbData: GetUserDbDataType = async (userId) => {
   }
 
   return {
-    moods: {},
+    moods: INITIAL_USER_MOODS_DATA,
     settings: {
       nextDateChangeUserName: 0,
       uiColor: "green",

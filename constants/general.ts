@@ -1,5 +1,5 @@
 import packageJson from "@/package.json";
-import { ErrorMessagesType } from "@/types";
+import { ErrorMessagesType, UserDbDataType } from "@/types";
 import { Nerko_One, Nunito } from "next/font/google";
 
 export const APP_VERSION = packageJson.version;
@@ -29,3 +29,13 @@ export const ERROR_MESSAGES: Record<ErrorMessagesType, string | null> = {
 
 export const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 export const USER_NAME_MAX_LENGTH = 15;
+
+export const INITIAL_USER_MOODS_DATA: UserDbDataType["moods"] = {
+  "2024": {
+    "9": {
+      "12": {
+        scaleValue: 7,
+      },
+    },
+  },
+};

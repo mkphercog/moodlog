@@ -3,22 +3,18 @@
 import { EMOJI_VARIANT_NAMES_LIST, SECONDARY_FONT } from "@/constants";
 import { useUiColors } from "@/context/ColorsContext";
 import { AnimatedEmoji } from "./ui";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-
-const getRandomEmojiIndex = () =>
-  Math.floor(Math.random() * EMOJI_VARIANT_NAMES_LIST.length);
+import { getRandomEmojiIndex } from "@/utils";
 
 export const HeroTitle = () => {
   const [emojiIndex, setEmojiIndex] = useState(0);
   const { currentUser } = useAuth();
   const { currentColors } = useUiColors();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setEmojiIndex(getRandomEmojiIndex());
-  }, []);
 
-  useEffect(() => {
     const interval = setInterval(() => {
       setEmojiIndex((stateIndex) => {
         if (stateIndex >= EMOJI_VARIANT_NAMES_LIST.length - 1) {

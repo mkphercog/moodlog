@@ -16,13 +16,14 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import { auth, db } from "@/firebase";
+import { auth } from "@/firebase";
 import { ErrorMessagesType } from "@/types";
 import { useRouter } from "next/navigation";
 import { getRedirectUrl } from "@/utils";
 import { AuthContextType } from "./AuthContext.type";
 import { useToast } from "@/components/ui/use-toast";
 import { getUserDbData, initNewUserDbData } from "@/actions";
+import { INITIAL_USER_MOODS_DATA } from "@/constants";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -31,8 +32,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
   const [currentUser, setCurrentUser] =
     useState<AuthContextType["currentUser"]>(null);
-  const [userMoodsData, setUserMoodsData] =
-    useState<AuthContextType["userMoodsData"]>(null);
+  const [userMoodsData, setUserMoodsData] = useState<
+    AuthContextType["userMoodsData"]
+  >(INITIAL_USER_MOODS_DATA);
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState<ErrorMessagesType>("none");
 
