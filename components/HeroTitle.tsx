@@ -1,34 +1,19 @@
 "use client";
 
-import { EMOJI_VARIANT_NAMES_LIST, SECONDARY_FONT } from "@/constants";
+import dynamic from "next/dynamic";
 import { useUiColors } from "@/context/ColorsContext";
-import { AnimatedEmoji } from "./ui";
-import { useLayoutEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { getRandomEmojiIndex } from "@/utils";
+import { SECONDARY_FONT } from "@/constants";
+import { Loading } from "./ui";
+
+const EmojiComponent = dynamic(() => import("./HeroEmoji"), {
+  ssr: false,
+  loading: () => <Loading />,
+});
 
 export const HeroTitle = () => {
-  const [emojiIndex, setEmojiIndex] = useState(0);
   const { currentUser } = useAuth();
   const { currentColors } = useUiColors();
-
-  useLayoutEffect(() => {
-    setEmojiIndex(getRandomEmojiIndex());
-
-    const interval = setInterval(() => {
-      setEmojiIndex((stateIndex) => {
-        if (stateIndex >= EMOJI_VARIANT_NAMES_LIST.length - 1) {
-          return 0;
-        }
-
-        return (stateIndex += 1);
-      });
-    }, 5000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
 
   const gradientColors = {
     "--gradient-dark-color": currentColors[7],
@@ -49,11 +34,11 @@ export const HeroTitle = () => {
         </span>{" "}
         mood!
       </h1>
-      <AnimatedEmoji
-        canAnimate
-        emojiVariant={EMOJI_VARIANT_NAMES_LIST[emojiIndex]}
-        className="mx-auto mt-10 !w-44 !h-44 sm:!w-52 sm:!h-52"
-      />
+
+      <div className="flex items-center justify-center mx-auto mt-10 !w-44 !h-44 sm:!w-52 sm:!h-52">
+        <EmojiComponent />
+      </div>
+
       {currentUser?.displayName && (
         <h3
           className={`mt-10 text-4xl sm:text-5xl !leading-[initial] text-center ${SECONDARY_FONT.className}`}
