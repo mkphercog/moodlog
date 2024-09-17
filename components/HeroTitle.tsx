@@ -1,15 +1,9 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useUiColors } from "@/context/ColorsContext";
 import { useAuth } from "@/context/AuthContext";
 import { SECONDARY_FONT } from "@/constants";
-import { Loading } from "./ui";
-
-const EmojiComponent = dynamic(() => import("./HeroEmoji"), {
-  ssr: false,
-  loading: () => <Loading />,
-});
+import { HeroEmoji } from "./HeroEmoji";
 
 export const HeroTitle = () => {
   const { currentUser } = useAuth();
@@ -36,7 +30,7 @@ export const HeroTitle = () => {
       </h1>
 
       <div className="flex items-center justify-center mx-auto mt-10 !w-44 !h-44 sm:!w-52 sm:!h-52">
-        <EmojiComponent />
+        <HeroEmoji />
       </div>
 
       {currentUser?.displayName && (

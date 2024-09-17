@@ -5,8 +5,8 @@ import { EMOJI_VARIANT_NAMES_LIST } from "@/constants";
 import { getRandomEmojiIndex } from "@/utils";
 import { AnimatedEmoji } from "./ui";
 
-const HeroEmoji = () => {
-  const [emojiIndex, setEmojiIndex] = useState(0);
+export const HeroEmoji = () => {
+  const [emojiIndex, setEmojiIndex] = useState(5);
 
   useEffect(() => {
     setEmojiIndex(getRandomEmojiIndex());
@@ -34,5 +34,3 @@ const HeroEmoji = () => {
     />
   );
 };
-
-export default HeroEmoji;

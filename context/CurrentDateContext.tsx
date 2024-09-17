@@ -1,24 +1,16 @@
 "use client";
 
+import { INIT_DATE } from "@/constants";
 import {
   useContext,
   useState,
   createContext,
   PropsWithChildren,
   FC,
+  useEffect,
 } from "react";
 
-const NOW = new Date();
-NOW.setHours(23, 59, 59, 999);
-
-const INITIAL_DATE = {
-  DAY: NOW.getDate(),
-  MONTH: NOW.getMonth() + 1,
-  YEAR: NOW.getFullYear(),
-  END_OF_DAY: NOW,
-};
-
-type CurrentDateContextType = {
+export type CurrentDateContextType = {
   currentDate: {
     DAY: number;
     MONTH: number;
@@ -33,7 +25,8 @@ const CurrentDateContext = createContext<CurrentDateContextType | undefined>(
 );
 
 export const CurrentDateProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [currentDate, setCurrentDate] = useState(INITIAL_DATE);
+  const [currentDate, setCurrentDate] =
+    useState<CurrentDateContextType["currentDate"]>(INIT_DATE);
 
   const changeCurrentDate = () => {
     const now = new Date();
@@ -46,6 +39,18 @@ export const CurrentDateProvider: FC<PropsWithChildren> = ({ children }) => {
       END_OF_DAY: now,
     });
   };
+
+  useEffect(() => {
+    const now = new Date();
+    now.setHours(23, 59, 59, 999);
+
+    setCurrentDate({
+      DAY: now.getDate(),
+      MONTH: now.getMonth() + 1,
+      YEAR: now.getFullYear(),
+      END_OF_DAY: now,
+    });
+  }, []);
 
   const value = {
     currentDate,

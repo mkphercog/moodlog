@@ -1,3 +1,5 @@
+import { CurrentDateContextType } from "@/context/CurrentDateContext";
+
 export const DAY_LIST = [
   "Monday",
   "Tuesday",
@@ -58,3 +60,10 @@ export const MONTHS = [
     name: "December",
   },
 ];
+
+export const INIT_DATE: CurrentDateContextType["currentDate"] = {
+  DAY: 1,
+  MONTH: 0,
+  YEAR: 2024,
+  END_OF_DAY: new Date(),
+};
